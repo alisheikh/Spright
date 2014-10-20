@@ -1,33 +1,33 @@
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            
+            <div class="account-wall">
+            <h1 class="text-center login-title">Spright.</h1>
+                <img class="profile-img" src="/img/logobox.png"
+                    alt="Spright logo">
+                    <?php echo $this->Session->flash(); ?>
+                             <?php
+echo $this->Form->create('User', array('class'=>'form-signin',
+    'url' => array(
+        'controller' => 'users',
+        'action' => 'login'
+    )
+));?>
 
-                <div class="login-panel panel panel-default" style="text-align:center;">
-<span style="font-size:48px"><i class="fa fa-stumbleupon fa-3"></i> Spright.</span>
-
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
-                    </div>
-                    <div class="panel-body">
-                        <form role="form">
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me
-                                    </label>
-                                </div>
-                                <!-- Change this to a button or input when using this as a form -->
-                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+                <?php echo $this->Form->input('User.username', array('class' => 'form-control', 'placeholder' => 'Enter your username','label'=> false, 'autofocus'=>'autofocus'));?>
+                 <?php echo $this->Form->input('User.password', array('class' => 'form-control', 'placeholder' => 'Enter your password','label'=> false,'type'=>'password'));?>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Sign in</button>
+                <label class="checkbox pull-left">
+                    <input type="checkbox" value="remember_me">
+                    Remember me
+                </label>
+                <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                </form>
             </div>
+            
         </div>
     </div>
+</div>
+

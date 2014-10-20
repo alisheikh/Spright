@@ -9,22 +9,17 @@ App::uses('AppModel', 'Model');
  */
 class Question extends AppModel {
 
-	public $actsAs = array('Tree'); 
+	public $actsAs = array('Tree');
 	public $displayField = 'code';
-	
+
 	public $virtualFields = array(
-    'label' => 'code');
-    
-    
-
-
+		'title' => 'Question.code');
 
 /**
  * Behaviors
  *
  * @var array
  */
-
 
 /**
  * Validation rules
@@ -86,47 +81,40 @@ class Question extends AppModel {
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-// /**
-//  * belongsTo associations
-//  *
-//  * @var array
-//  */
-// 	public $belongsTo = array(
-// 		'ParentQuestion' => array(
-// 			'className' => 'Question',
-// 			'foreignKey' => 'parent_id',
-// 			'conditions' => '',
-// 			'fields' => '',
-// 			'order' => ''
-// 		),
-// 		'Jobtemplate' => array(
-// 			'className' => 'Jobtemplate',
-// 			'foreignKey' => 'jobtemplate_id',
-// 			'conditions' => '',
-// 			'fields' => '',
-// 			'order' => ''
-// 		)
-// 	);
+/**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Jobtemplate' => array(
+			'className' => 'Jobtemplate',
+			'foreignKey' => 'jobtemplate_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+		)
+	);
 
 // /**
-//  * hasMany associations
-//  *
-//  * @var array
-//  */
-// 	public $hasMany = array(
-// 		'ChildQuestion' => array(
-// 			'className' => 'Question',
-// 			'foreignKey' => 'parent_id',
-// 			'dependent' => false,
-// 			'conditions' => '',
-// 			'fields' => '',
-// 			'order' => '',
-// 			'limit' => '',
-// 			'offset' => '',
-// 			'exclusive' => '',
-// 			'finderQuery' => '',
-// 			'counterQuery' => ''
-// 		)
-// 	);
+	//  * hasMany associations
+	//  *
+	//  * @var array
+	//  */
+	// 	public $hasMany = array(
+	// 		'ChildQuestion' => array(
+	// 			'className' => 'Question',
+	// 			'foreignKey' => 'parent_id',
+	// 			'dependent' => false,
+	// 			'conditions' => '',
+	// 			'fields' => '',
+	// 			'order' => '',
+	// 			'limit' => '',
+	// 			'offset' => '',
+	// 			'exclusive' => '',
+	// 			'finderQuery' => '',
+	// 			'counterQuery' => ''
+	// 		)
+	// 	);
 
 }

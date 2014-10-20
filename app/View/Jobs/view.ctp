@@ -1,249 +1,196 @@
-<div class="jobs view">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="page-header">
-				<h1><?php echo __('Job'); ?></h1>
-			</div>
-		</div>
-	</div>
 
-	<div class="row">
+<?php
+//debug($job);
 
-		<div class="col-md-3">
-			<div class="actions">
-				<div class="panel panel-default">
-					<div class="panel-heading">Actions</div>
-						<div class="panel-body">
-							<ul class="nav nav-pills nav-stacked">
-									<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp&nbsp;Edit Job'), array('action' => 'edit', $job['Job']['id']), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Form->postLink(__('<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete Job'), array('action' => 'delete', $job['Job']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $job['Job']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Jobs'), array('action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Job'), array('action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Users'), array('controller' => 'users', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New User'), array('controller' => 'users', 'action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Jobtypes'), array('controller' => 'jobtypes', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Jobtype'), array('controller' => 'jobtypes', 'action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Rooms'), array('controller' => 'rooms', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Room'), array('controller' => 'rooms', 'action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Statustypes'), array('controller' => 'statustypes', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Statustype'), array('controller' => 'statustypes', 'action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Joblogs'), array('controller' => 'joblogs', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Joblog'), array('controller' => 'joblogs', 'action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Tasks'), array('controller' => 'tasks', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Task'), array('controller' => 'tasks', 'action' => 'add'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-list"></span>&nbsp&nbsp;List Jobtemplates'), array('controller' => 'jobtemplates', 'action' => 'index'), array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;New Jobtemplate'), array('controller' => 'jobtemplates', 'action' => 'add'), array('escape' => false)); ?> </li>
-							</ul>
-						</div><!-- end body -->
-				</div><!-- end panel -->
-			</div><!-- end actions -->
-		</div><!-- end col md 3 -->
+?>
 
-		<div class="col-md-9">			
-			<table cellpadding="0" cellspacing="0" class="table table-striped">
-				<tbody>
-				<tr>
-		<th><?php echo __('Id'); ?></th>
-		<td>
-			<?php echo h($job['Job']['id']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Code'); ?></th>
-		<td>
-			<?php echo h($job['Job']['code']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Description'); ?></th>
-		<td>
-			<?php echo h($job['Job']['description']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('User'); ?></th>
-		<td>
-			<?php echo $this->Html->link($job['User']['id'], array('controller' => 'users', 'action' => 'view', $job['User']['id'])); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Jobtype'); ?></th>
-		<td>
-			<?php echo $this->Html->link($job['Jobtype']['id'], array('controller' => 'jobtypes', 'action' => 'view', $job['Jobtype']['id'])); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Room'); ?></th>
-		<td>
-			<?php echo $this->Html->link($job['Room']['code'], array('controller' => 'rooms', 'action' => 'view', $job['Room']['id'])); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Statustype'); ?></th>
-		<td>
-			<?php echo $this->Html->link($job['Statustype']['id'], array('controller' => 'statustypes', 'action' => 'view', $job['Statustype']['id'])); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Qs1'); ?></th>
-		<td>
-			<?php echo h($job['Job']['qs1']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Qs2'); ?></th>
-		<td>
-			<?php echo h($job['Job']['qs2']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Qs3'); ?></th>
-		<td>
-			<?php echo h($job['Job']['qs3']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Qs4'); ?></th>
-		<td>
-			<?php echo h($job['Job']['qs4']); ?>
-			&nbsp;
-		</td>
-</tr>
-<tr>
-		<th><?php echo __('Qs5'); ?></th>
-		<td>
-			<?php echo h($job['Job']['qs5']); ?>
-			&nbsp;
-		</td>
-</tr>
-				</tbody>
-			</table>
+<div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
 
-		</div><!-- end col md 9 -->
 
-	</div>
-</div>
+                    <h1><span class="btn btn-info" type="button"><?php echo $job['Statustype']['code']; ?> </span> Details <small>WO<?php echo $job['Job']['id']; ?></small>
+<a href="#" class="btn btn-primary pull-right save"><i class="fa fa-pencil"></i> Edit</a>
+                    </h1>
 
-<div class="related row">
-	<div class="col-md-12">
-	<h3><?php echo __('Related Joblogs'); ?></h3>
-	<?php if (!empty($job['Joblog'])): ?>
-	<table cellpadding = "0" cellspacing = "0" class="table table-striped">
-	<thead>
-	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Code'); ?></th>
-		<th><?php echo __('Job Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Modified'); ?></th>
-		<th class="actions"></th>
-	</tr>
-	<thead>
-	<tbody>
-	<?php foreach ($job['Joblog'] as $joblog): ?>
-		<tr>
-			<td><?php echo $joblog['id']; ?></td>
-			<td><?php echo $joblog['code']; ?></td>
-			<td><?php echo $joblog['job_id']; ?></td>
-			<td><?php echo $joblog['created']; ?></td>
-			<td><?php echo $joblog['modified']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-search"></span>'), array('controller' => 'joblogs', 'action' => 'view', $joblog['id']), array('escape' => false)); ?>
-				<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>'), array('controller' => 'joblogs', 'action' => 'edit', $joblog['id']), array('escape' => false)); ?>
-				<?php echo $this->Form->postLink(__('<span class="glyphicon glyphicon-remove"></span>'), array('controller' => 'joblogs', 'action' => 'delete', $joblog['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $joblog['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</tbody>
-	</table>
-<?php endif; ?>
 
-	<div class="actions">
-		<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;New Joblog'), array('controller' => 'joblogs', 'action' => 'add'), array('escape' => false, 'class' => 'btn btn-default')); ?> 
-	</div>
-	</div><!-- end col md 12 -->
-</div>
-<div class="related row">
-	<div class="col-md-12">
-	<h3><?php echo __('Related Tasks'); ?></h3>
-	<?php if (!empty($job['Task'])): ?>
-	<table cellpadding = "0" cellspacing = "0" class="table table-striped">
-	<thead>
-	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Job Id'); ?></th>
-		<th><?php echo __('Statustype Id'); ?></th>
-		<th><?php echo __('Scheduled'); ?></th>
-		<th class="actions"></th>
-	</tr>
-	<thead>
-	<tbody>
-	<?php foreach ($job['Task'] as $task): ?>
-		<tr>
-			<td><?php echo $task['id']; ?></td>
-			<td><?php echo $task['job_id']; ?></td>
-			<td><?php echo $task['statustype_id']; ?></td>
-			<td><?php echo $task['scheduled']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-search"></span>'), array('controller' => 'tasks', 'action' => 'view', $task['id']), array('escape' => false)); ?>
-				<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>'), array('controller' => 'tasks', 'action' => 'edit', $task['id']), array('escape' => false)); ?>
-				<?php echo $this->Form->postLink(__('<span class="glyphicon glyphicon-remove"></span>'), array('controller' => 'tasks', 'action' => 'delete', $task['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $task['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</tbody>
-	</table>
-<?php endif; ?>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                   
+                      
+                        <div class="panel-body">
+                            <div class="row">
+                               
 
-	<div class="actions">
-		<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;New Task'), array('controller' => 'tasks', 'action' => 'add'), array('escape' => false, 'class' => 'btn btn-default')); ?> 
-	</div>
-	</div><!-- end col md 12 -->
-</div>
-<div class="related row">
-	<div class="col-md-12">
-	<h3><?php echo __('Related Jobtemplates'); ?></h3>
-	<?php if (!empty($job['Jobtemplate'])): ?>
-	<table cellpadding = "0" cellspacing = "0" class="table table-striped">
-	<thead>
-	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Code'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Modified'); ?></th>
-		<th class="actions"></th>
-	</tr>
-	<thead>
-	<tbody>
-	<?php foreach ($job['Jobtemplate'] as $jobtemplate): ?>
-		<tr>
-			<td><?php echo $jobtemplate['id']; ?></td>
-			<td><?php echo $jobtemplate['code']; ?></td>
-			<td><?php echo $jobtemplate['created']; ?></td>
-			<td><?php echo $jobtemplate['modified']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-search"></span>'), array('controller' => 'jobtemplates', 'action' => 'view', $jobtemplate['id']), array('escape' => false)); ?>
-				<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>'), array('controller' => 'jobtemplates', 'action' => 'edit', $jobtemplate['id']), array('escape' => false)); ?>
-				<?php echo $this->Form->postLink(__('<span class="glyphicon glyphicon-remove"></span>'), array('controller' => 'jobtemplates', 'action' => 'delete', $jobtemplate['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $jobtemplate['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</tbody>
-	</table>
-<?php endif; ?>
+                            <!-- Nav tabs -->
+                            <ul id="tabs" class="nav nav-tabs">
+                                
+                                <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
+                                <li><a href="#tasks" data-toggle="tab">Tasks</a></li>
+                                <li><a href="#complete" data-toggle="tab">Complete</a></li>
+                          
+                            </ul>
 
-	<div class="actions">
-		<?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;New Jobtemplate'), array('controller' => 'jobtemplates', 'action' => 'add'), array('escape' => false, 'class' => 'btn btn-default')); ?> 
-	</div>
-	</div><!-- end col md 12 -->
-</div>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="details">
+                                    <h4></h4>
+
+
+                                       <div class="row" style="padding:20px">
+                                <div class="col-md-6"><div class="form-group">
+					<?php echo $this->Form->input('fullname', array('class' => 'form-control', 'value' => $job['Job']['fullname'],'label'=>'Requestor', 'disabled' => 'disabled'));?>
+				</div>
+					<div class="form-group">
+					<?php echo $this->Form->input('email', array('class' => 'form-control', 'value' => $job['Job']['email'],'label'=>'Email', 'disabled' => 'disabled'));?>
+				</div>
+					<div class="form-group">
+					<?php echo $this->Form->input('phone', array('class' => 'form-control', 'placeholder' => 'User Id','label'=>'Phone', 'value' => $job['Job']['phone'],'disabled' => 'disabled'));?>
+				</div>
+							    <div class="form-group">
+                   <?php echo $this->Form->input('Site.code', array('class' => 'form-control', 'value' => $job['Site']['code'],'label'=>'Site', 'disabled' => 'disabled'));?>
+                </div>
+			    <div class="form-group">
+                   <?php echo $this->Form->input('Building.code', array('class' => 'form-control', 'value' => $job['Building']['code'],'label'=>'Building', 'disabled' => 'disabled'));?>
+                </div>
+
+			    <div class="form-group">
+                   <?php echo $this->Form->input('Floor.code', array('class' => 'form-control', 'value' => $job['Floor']['code'],'label'=>'Floor', 'disabled' => 'disabled'));?>
+                </div>
+                			    <div class="form-group">
+                   <?php echo $this->Form->input('Room.code', array('class' => 'form-control', 'value' => $job['Room']['code'],'label'=>'Room', 'disabled' => 'disabled'));?>
+                </div>
+
+				
+		
+				</div>
+                                <div class="col-md-6">
+                                <div class="form-group">
+					<?php echo $this->Form->input('Jobtype.code', array('class' => 'form-control', 'value' => $job['Jobtype']['code'],'label'=>'Job Type','disabled' => 'disabled'));?>
+				</div>
+				<div class="form-group">
+					<?php echo $this->Form->input('code', array('class' => 'form-control', 'value' => $job['Asset']['code'],'label'=>'Asset','disabled' => 'disabled'));?>
+				</div>
+
+                                <div class="form-group">
+					<?php echo $this->Form->input('qs1', array('class' => 'form-control', 'label' => 'Questions' , 'disabled' => 'disabled', 'value' => $job['Qs1']['code']));?>
+				</div>
+				<div class="form-group">
+					<?php if($job['Job']['qs2']) echo $this->Form->input('qs2', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs2']['code']));?>
+				</div>
+				<div class="form-group">
+					<?php if($job['Job']['qs3']) echo $this->Form->input('qs3', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs3']['code']));?>
+				</div>
+				<div class="form-group">
+					<?php if($job['Job']['qs4']) echo $this->Form->input('qs4', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs4']['code']));?>
+				</div>
+				<div class="form-group">
+					<?php if($job['Job']['qs5']) echo $this->Form->input('qs5', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs5']['code']));?>
+				</div>
+
+				<div class="form-group">
+					<?php echo $this->Form->input('description', array('type'=>'textarea','class' => 'form-control', 'value' => $job['Job']['description'],'label'=>'Description','disabled' => 'disabled'));?>
+				</div>
+				</div>
+                            </div>
+
+			
+
+                                   
+                                </div>
+                                <div class="tab-pane fade" id="tasks">
+                                <br />
+<!-- Tasks -->
+<div class="panel panel-default">
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Task</th>
+                                            <th>Scheduled</th>
+                                            
+                                            <th>Created</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                <?php foreach ($job['Task'] as $task): ?>    
+                                    
+                                        <tr>
+                                            
+                                            <td><?php echo $task['code']; ?></td>
+                                            <td> 
+                                                  <?php if ($task['scheduled' ]===0): ?>
+                                             <?php  echo $task['user_id']; ?></i>
+                                            <?php else: ?>
+                                                 <i class="fa fa-times" style="color:red"></i>
+                                            <?php endif; ?>
+                                            
+                                            </td>
+                                            <td><?php echo $task['created']; ?></td>
+                                            
+    
+                                        </tr>
+                                <?php endforeach; ?>        
+          
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+            <!-- End Tasks -->        
+            
+
+ 
+
+                                </div>
+
+
+                                <div class="tab-pane fade" id="history">
+
+
+                                </div>
+                                <div class="tab-pane fade" id="complete">
+                                    <h4></h4>
+<?php echo $this->Form->create('Job', array('role' => 'form','action'=>'complete')); ?>
+        <?php echo $this->Form->hidden('id', array('class' => 'form-control', 'value' => $job['Job']['id']));?>
+<div class="form-group">
+<label>Completion time</label>
+					<div class="input-group date form_datetime" style="max-width:30%" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="JobCompletiondate" name="data[Job][completiondate]">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				</div>
+
+
+                                    	<div class="form-group">
+					<?php echo $this->Form->input('completioncomments', array('class' => 'form-control', 'placeholder' => 'What did you do to resolve this work order?','label'=>'Completion comments','type'=>'textarea'));?>
+				</div>
+
+				<button type="submit" class="btn btn-success btn-lg btn-block"><i class="fa fa-check"></i> Complete</button>
+                     <?php echo $this->Form->end() ?>            
+                                </div>
+                    
+                            </div>
+                            
+                      
+             
+        
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+
+
+

@@ -15,6 +15,12 @@ class GroupsController extends AppController {
  */
 	public $components = array('Paginator');
 
+	public function beforeFilter() {
+		parent::beforeFilter();
+		// Allow users to register and logout.
+		$this->Auth->allow();
+	}
+
 /**
  * index method
  *
@@ -47,8 +53,14 @@ class GroupsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+
 			$this->Group->create();
 			if ($this->Group->save($this->request->data)) {
+
+				//	$group = $this->Group->id = $this->Group->getLastInsertID();
+				//	$this->Acl->deny($group, 'controllers');
+
+				$this->Acl->deny($group, 'controllers');
 				$this->Session->setFlash(__('The group has been saved.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
@@ -76,7 +88,7 @@ class GroupsController extends AppController {
 				$this->Session->setFlash(__('The group could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			$options = array('conditions' => array('Group.' . $this->Group->primaryKey => $id));
+			$options             = array('conditions' => array('Group.' . $this->Group->primaryKey => $id));
 			$this->request->data = $this->Group->find('first', $options);
 		}
 	}

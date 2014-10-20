@@ -29,29 +29,33 @@
 Router::setExtensions(array('json', 'xml'));
 Router::parseExtensions();
 
- 
-	Router::connect('/', array('controller' => 'jobs', 'action' => 'dashboard'));
-	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
-	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
-	Router::connect('/assets', array('controller' => 'codes', 'action' => 'assetindex'));
-	Router::connect('/assets/create', array('controller' => 'codes', 'action' => 'assetcreate'));
-	Router::connect('/assets/view', array('controller' => 'codes', 'action' => 'assetview'));
-	//Space Module
-	Router::connect('/locations', array('controller' => 'codes', 'action' => 'location'));
-	
+Router::connect('/', array('controller' => 'jobs', 'action' => 'dashboard'));
+
+//User Management
+Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+Router::connect('/changepassword', array('controller' => 'users', 'action' => 'password'));
+
+
+Router::connect('/assets', array('controller' => 'codes', 'action' => 'assetindex'));
+Router::connect('/assets/create', array('controller' => 'codes', 'action' => 'assetcreate'));
+Router::connect('/assets/view', array('controller' => 'codes', 'action' => 'assetview'));
+//Space Module
+Router::connect('/locations', array('controller' => 'codes', 'action' => 'location'));
+
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */
-	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
  */
-	CakePlugin::routes();
+CakePlugin::routes();
 
 /**
  * Load the CakePHP default routes. Only remove this if you do not want to use
  * the built-in default routes.
  */
-	require CAKE . 'Config' . DS . 'routes.php';
+require CAKE . 'Config' . DS . 'routes.php';

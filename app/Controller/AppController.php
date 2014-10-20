@@ -33,35 +33,35 @@ App::uses('Controller', 'Controller');
 
 class AppController extends Controller {
 
+	public $components = array(
+		'Acl',
+		'Auth' => array(
+			'authorize' => array(
+				'Actions' => array('actionPath' => 'controllers')
+			)
+		),
+		'Session'
+	);
+	public $helpers = array('Html', 'Form', 'Session', 'AssetCompress.AssetCompress');
 
-    //.'DebugKit.Toolbar',
+	public function beforeFilter() {
+		$this->Auth->allow();
 
-    public $components = array(
-        'Session',
-        'Auth' => array(
-            'loginRedirect' => array(
-                'controller' => 'jobs',
-                'action' => 'dashboard'
-            ),
-            'logoutRedirect' => array(
-                'controller' => 'pages',
-                'action' => 'display',
-                'home'
-            ),
-            'authenticate' => array(
-                'Form' => array(
-                    'passwordHasher' => 'Blowfish'
-                )
-            )
-        )
-    );
+		$this->layout = 'spright';
 
-    public function beforeFilter() {
-        $this->Auth->allow();
-        $this->layout = 'spright';
-    }
-    //...
+		//Configure AuthComponent
+		$this->Auth->loginAction = array(
+			'controller' => 'users',
+			'action' => 'login',
+		);
+		$this->Auth->logoutRedirect = array(
+			'controller' => 'users',
+			'action' => 'login',
+		);
+		$this->Auth->loginRedirect = array(
+			'controller' => 'jobs',
+			'action' => 'dashboard',
+		);
+	}
+
 }
-
-
-   

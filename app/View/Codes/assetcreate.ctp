@@ -12,23 +12,19 @@
     </div>
                 <div class="row">
 
-
+<?php echo $this->Form->create('Code', array('role' => 'form','class'=>'assetForm')); ?>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs">
 
                         <li class="active"><a href="#general" data-toggle="tab">General <i class="fa"></i></a></li>
                         <li><a href="#detailed" data-toggle="tab">Detailed <i class="fa"></i></a></li>
-                        <li><a href="#linked" data-toggle="tab">Linked</a></li>
-                        <li><a href="#attachments" data-toggle="tab">Attachments</a></li>
-                        <li><a href="#depreciation" data-toggle="tab">Asset Depreciation</a></li>
-
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="general">
 
-                            <?php echo $this->Form->create('Code', array('role' => 'form','class'=>'assetForm')); ?>
+                            
 
                             <div class="row" style="padding:20px">
                                 <div class="col-md-6">
@@ -43,8 +39,7 @@
                                    </div>				
                                    <div class="form-group">
                                        <?php echo $this->Form->input('status', array('class' => 'form-control',
-                                        'options' => array('Active','Decomissioned'),
-                                        'empty' => '--'
+                                        'options' => array('Active','Decomissioned')
                                         ));?>
                                     </div>	
                                     <div id="chooseLocation">
@@ -58,9 +53,7 @@
                                </div>
                            </div>
 
-                           <div class="form-group">
-                               <button type="submit" class="btn btn-primary btn-lg btn-block">Create Asset</button>
-                           </div>
+                       
 
 
                        </div>
@@ -93,19 +86,24 @@
                                    <?php echo $this->Form->input('Code.model', array('class' => 'form-control', 'placeholder' => 'What is the model?'));?>
                                </div>
 
-                            <div class="input-group">
-  <span class="input-group-addon">$</span>
-  <input type="text" class="form-control">
-  <span class="input-group-addon">.00</span>
-</div>
+                               <div class="form-group">
+                                   <?php echo $this->Form->input('Code.cost', array('class' => 'form-control', 'placeholder' => 'What is the cost/value?'));?>
+                               </div>
+
+
                            </div>
+
                        </div> <!-- col-md-6 end> -->
+
                    </div>
 
 
-                   <?php echo $this->Form->end() ?>
-                   </div
-
+                   
+                   </div>
+                       <div class="form-group">
+                               <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
+                           </div>
+<?php echo $this->Form->end() ?>
                </div>
            </div>
        </div></div></div

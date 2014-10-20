@@ -9,7 +9,7 @@ App::uses('AppController', 'Controller');
 class AttachmentsController extends AppController {
 
 /**
- * Components
+ * ComponentsApp::uses('File', 'Utility');
  *
  * @var array
  */
@@ -76,7 +76,7 @@ class AttachmentsController extends AppController {
 				$this->Session->setFlash(__('The attachment could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			$options = array('conditions' => array('Attachment.' . $this->Attachment->primaryKey => $id));
+			$options             = array('conditions' => array('Attachment.' . $this->Attachment->primaryKey => $id));
 			$this->request->data = $this->Attachment->find('first', $options);
 		}
 	}
@@ -88,17 +88,29 @@ class AttachmentsController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
-		$this->Attachment->id = $id;
-		if (!$this->Attachment->exists()) {
-			throw new NotFoundException(__('Invalid attachment'));
+	public function delete() {
+
+		$this->autoRender = false;
+		$node             = $this->request->query['node'];
+
+		if (!$this->Attachment->exists($node)) {
+			throw new NotFoundException(__('Invalid code'));
 		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Attachment->delete()) {
-			$this->Session->setFlash(__('The attachment has been deleted.'), 'default', array('class' => 'alert alert-success'));
-		} else {
-			$this->Session->setFlash(__('The attachment could not be deleted. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
+
+		if ($this->request->is('get')) {
+
+			$this->Attachment->id = $node;
+
+			$attachment = $this->Attachment->find('first', array('conditions' => array('id' => $node)));
+
+			
+			$this->Attachment->delete();
+
+			$file = WWW_ROOT . '/files/' . $attachment['Attachment']['attachment'];
+			unlink($file);
+
 		}
-		return $this->redirect(array('action' => 'index'));
+
 	}
+
 }

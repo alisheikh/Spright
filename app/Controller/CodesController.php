@@ -44,10 +44,10 @@ class CodesController extends AppController {
 		endif;
 
 		$this->Code->recursive = -1;
-		$options               = array('conditions' => array('Code.id' => $id));
-		$json                  = $this->Code->find('first', $options);
-		$json                  = Set::extract('/Code/.', $json);
-		$json                  = $this->set('json', $json);
+		$options = array('conditions' => array('Code.id' => $id));
+		$json = $this->Code->find('first', $options);
+		$json = Set::extract('/Code/.', $json);
+		$json = $this->set('json', $json);
 
 		//	$json = Hash::extract($json, '{n}.Code');
 
@@ -57,25 +57,43 @@ class CodesController extends AppController {
 	function buildLocations() {
 
 		$this->Code->recursive = -1;
-		if (isset($_GET['node'])):
+		if (isset($_GET['key'])):
 
-			$locations = $this->Code->find('all', array('conditions' => array('Code.parent_id' => $_GET['node']),
-					'fields'                                                                         => array('code', 'id', 'parent_id', 'load_on_demand', 'description'),
-					'order' => array('lft ASC')
-				));
+			$locations = $this->Code->find('all', array('conditions' => array('Code.parent_id' => $_GET['key']),
+				'fields' => array('code', 'id', 'parent_id', 'lazy'),
+				'order' => array('lft ASC')
+			));
 		else:
 
 			$locations = $this->Code->find('all', array('conditions' => array('Code.parent_id' => 1),
-					'fields'                                                                         => array('code', 'id', 'parent_id', 'load_on_demand'),
-					'order' => array('lft ASC')
-				));
+				'fields' => array('code', 'id', 'parent_id', 'lazy'),
+				'order' => array('lft ASC')
+			));
 		endif;
 
-		$results = Hash::extract($locations, '{n}.Code');
+		function mapThreaded($source, &$target) {
+			foreach ($source as $item) {
+				$node = array
+				(
+					'key' => $item['Code']['id'],
+					'title' => $item['Code']['code'],
+					'lazy' => $item['Code']['lazy'],
 
-		$results = Hash::nest($results, ['idPath' => '{n}.id', 'parentPath' => '{n}.parent_id', 'root' => '0']);
+				);
 
-		$results = $this->set('json', $results);
+				//	if (count($item['children'])) {
+				//		mapThreaded($item['children'], $node['children']);
+				//	}
+
+				$target[] = $node;
+			}
+		}
+
+		$tree = array();
+
+		mapThreaded($locations, $tree);
+
+		$results = $this->set('json', $tree);
 
 		$this->set('_serialize', 'json');
 
@@ -112,10 +130,10 @@ class CodesController extends AppController {
 
 		//GET Variables
 		$locationCode = $this->request->query['location'];
-		$parent_id    = $this->request->query['parent_id'];
+		$parent_id = $this->request->query['parent_id'];
 
-		$this->request->data['Code']['code']        = $locationCode;
-		$this->request->data['Code']['parent_id']   = $parent_id;
+		$this->request->data['Code']['code'] = $locationCode;
+		$this->request->data['Code']['parent_id'] = $parent_id;
 		$this->request->data['Code']['codetype_id'] = 0;
 
 		//Lets save it now but only if this request is via a GET request
@@ -124,28 +142,6 @@ class CodesController extends AppController {
 			$this->Code->save($this->request->data);
 
 			echo $this->Code->getLastInsertID();
-
-		}
-
-	}
-
-	public function deleteCode() {
-
-		$this->autoRender = false;
-
-		//GET Variables
-
-		$node = $this->request->query['node'];
-
-		//	if (!$this->Code->exists()) {
-		//		throw new NotFoundException(__('Invalid code'));
-		//	}
-
-		//Lets save it now but only if this request is via a GET request
-		if ($this->request->is('get')) {
-
-			$this->Code->id = $node;
-			$this->Code->delete();
 
 		}
 
@@ -193,11 +189,11 @@ class CodesController extends AppController {
 				$this->Session->setFlash(__('The code could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			$options             = array('conditions' => array('Code.' . $this->Code->primaryKey => $id));
+			$options = array('conditions' => array('Code.' . $this->Code->primaryKey => $id));
 			$this->request->data = $this->Code->find('first', $options);
 		}
 		$parentCodes = $this->Code->ParentCode->find('list');
-		$codetypes   = $this->Code->Codetype->find('list');
+		$codetypes = $this->Code->Codetype->find('list');
 		$this->set(compact('rooms', 'codetypes'));
 	}
 
@@ -213,13 +209,12 @@ class CodesController extends AppController {
 		if (!$this->Code->exists()) {
 			throw new NotFoundException(__('Invalid code'));
 		}
-		$this->request->onlyAllow('post', 'delete');
+		$this->request->onlyAllow('get');
 		if ($this->Code->delete()) {
-			$this->Session->setFlash(__('The code has been deleted.'), 'default', array('class' => 'alert alert-success'));
 		} else {
-			$this->Session->setFlash(__('The code could not be deleted. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
+	
 		}
-		return $this->redirect(array('action' => 'index'));
+		
 	}
 
 	/**
@@ -239,13 +234,40 @@ class CodesController extends AppController {
 
 		if ($this->request->is('post')) {
 
+			$site = $this->request->data['Site']['code'];
+			if (!empty($this->request->data['Building']['code'])):$building = $this->request->data['Building']['code'];
+			endif;
+			if (!empty($this->request->data['Floor']['code'])):$floor = $this->request->data['Floor']['code'];
+			endif;
+			if (!empty($this->request->data['Room']['code'])):$room = $this->request->data['Room']['code'];
+			endif;
+
+			if (is_numeric($site)) {
+				$parentID = $site;
+			} elseif (is_numeric($building)) {
+				$parentID = $building;
+			} elseif (is_numeric($floor)) {
+				$parentID = $floor;
+			} else {
+				$parentID = $room;
+			}
+
+			if (!empty($site)):$this->request->data['Code']['site_id'] = $site;
+			endif;
+			if (!empty($building)):$this->request->data['Code']['building_id'] = $building;
+			endif;
+			if (!empty($floor)):$this->request->data['Code']['floor_id'] = $floor;
+			endif;
+			if (!empty($room)):$this->request->data['Code']['room_id'] = $room;
+			endif;
+
 			$this->request->data['Code']['codetype_id'] = 5;
-			$this->request->data['Code']['parent_id']   = $this->request->data['Code']['room_id'];
-			debug($this->request->data);
+			$this->request->data['Code']['parent_id'] = $parentID;
+
 			$this->Code->create();
 			if ($this->Code->save($this->request->data)) {
 				$this->Session->setFlash(__('Success! Asset created'), 'default', array('class' => 'alert alert-success'));
-
+				return $this->redirect(array('action' => 'assetindex'));
 			} else {
 				$this->Session->setFlash(__('The Asset could not be created. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
@@ -260,8 +282,8 @@ class CodesController extends AppController {
 			}
 		endif;
 
-		if ($this->request->is('post')) {
-			debug($this->request->data);
+		if ($this->request->is('PUT')) {
+
 			if ($this->Code->save($this->request->data)) {
 				$this->Session->setFlash(__('The code has been saved.'), 'default', array('class' => 'alert alert-success'));
 				//return $this->redirect(array('action' => 'assetview/' . $id));
@@ -270,10 +292,58 @@ class CodesController extends AppController {
 			}
 		} else {
 
-			$options             = array('conditions' => array('Code.' . $this->Code->primaryKey => $id));
-			$this->request->data = $this->Code->find('first', $options);
+			$options = array('conditions' => array('Code.' . $this->Code->primaryKey => $id));
+			$asset = $this->Code->find('first', $options);
+			$this->request->data = $asset;
+
+			//Retrive all Site Codes
+			$sites = $this->Code->find('list', array(
+				'fields' => array('id', 'code'),
+				'conditions' => array('Code.codetype_id' => 1)
+			));
+
+			//Retrive all Building Codes
+			$buildings = $this->Code->find('list', array(
+				'fields' => array('id', 'code'),
+				'conditions' => array('parent_id' => $asset['Site']['id'])
+			));
+
+			//Retrive all Floor Codes
+			$floors = $this->Code->find('list', array(
+				'fields' => array('id', 'code'),
+				'conditions' => array('parent_id' => $asset['Building']['id'])
+			));
+
+			//Retrive all Room Codes
+			$rooms = $this->Code->find('list', array(
+				'fields' => array('id', 'code'),
+				'conditions' => array('parent_id' => $asset['Floor']['id'])
+			));
+
+			//Set some variables so the view can populate the location select elements
+			$this->set('sites', $sites);
+			$this->set('buildings', $buildings);
+			$this->set('floors', $floors);
+			$this->set('rooms', $rooms);
 
 		}
+
+	}
+
+	public function getAssets() {
+
+		$q = $_GET['q'];
+
+		$json = $this->Code->find('all', array(
+			'conditions' => array(
+				'Code.code LIKE' => '%' . $q . '%'),
+			'fields' => array('Code.code')
+		));
+		$json = Set::extract('/Code/.', $json);
+
+		$this->set('json', $json);
+
+		$this->set('_serialize', 'json');
 
 	}
 
@@ -282,7 +352,7 @@ class CodesController extends AppController {
 		$this->autoRender = false;
 		// A list of permitted file extensions
 		$allowed = array('png', 'jpg', 'gif', 'pdf', 'jpeg');
-		$temp    = explode(".", $_FILES["file"]["name"]);
+		$temp = explode(".", $_FILES["file"]["name"]);
 
 		if (isset($_FILES['upl']) && $_FILES['upl']['error'] == 0) {
 
@@ -299,12 +369,12 @@ class CodesController extends AppController {
 
 				$this->loadModel('Attachment');
 
-				$this->request->data['Attachment']['model']       = $this->params['controller'];
+				$this->request->data['Attachment']['model'] = $this->params['controller'];
 				$this->request->data['Attachment']['foreign_key'] = $_POST['foreign_key'];
-				$this->request->data['Attachment']['name']        = $_FILES['upl']['name'];
-				$this->request->data['Attachment']['size']        = $_FILES['upl']['size'];
-				$this->request->data['Attachment']['type']        = $_FILES['upl']['type'];
-				$this->request->data['Attachment']['attachment']  = $renamed;
+				$this->request->data['Attachment']['name'] = $_FILES['upl']['name'];
+				$this->request->data['Attachment']['size'] = $_FILES['upl']['size'];
+				$this->request->data['Attachment']['type'] = $_FILES['upl']['type'];
+				$this->request->data['Attachment']['attachment'] = $renamed;
 
 				$this->Attachment->save($this->request->data);
 
@@ -316,38 +386,29 @@ class CodesController extends AppController {
 		echo '{"status":"error"}';
 	}
 
-	function attachmentDelete($id = null) {
-
-		if (!$this->Code->exists($id)) {
-			throw new NotFoundException(__('Invalid ID'));
-		} else {
-
-			$this->Code->id = $id;
-			$this->Code->delete();
-
-		}
-
-	}
-
 	//JSON VALIDATION
 
 	function validAsset() {
 
 		$value = $this->request->data['Code']['code'];
 
-		$conditions = array(
-			'Code.code' => $value,
-		);
+		$options = array('conditions' => array('Code.code' => $value));
+		$validCode = $this->Code->find('first', $options);
 
-		if ($this->Code->hasAny($conditions)) {
-			$isAvailable = false;
+		if ($validCode) {
+
+			if ($validCode['Code']['code'] === $value):
+				$isAvailable = true;
+			else:
+				$isAvailable = false;
+			endif;
 		} else {
 			$isAvailable = true;
 		}
 
 		$results = $this->set('json', array(
-				'valid' => $isAvailable,
-			));
+			'valid' => $isAvailable,
+		));
 
 		$this->set('_serialize', 'json');
 

@@ -1,49 +1,63 @@
+
+
+<?php
+
+//($jobs);
+
+?>
+
+
  <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Work Orders</h1>
+                    <h1 class="page-header"><i class="fa fa-tasks fa-fw"></i> Work Orders
+<a href="/jobs/add/" class="btn btn-danger pull-right" id="addButton"><i class="fa fa-plus"></i> Raise Work Order</a>
+                    </h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-<div class="col-md-9">
+
             <table cellpadding="0" cellspacing="0" class="table table-striped">
                 <thead>
                     <tr>
-                        <th><?php echo $this->Paginator->sort('id','#'); ?></th>
-                        
+                        <th></th>
+                        <th><?php echo $this->Paginator->sort('Job.id','#'); ?></th>
                         <th><?php echo $this->Paginator->sort('description'); ?></th>
                         
                         <th><?php echo $this->Paginator->sort('building.code'); ?></th>
                         <th><?php echo $this->Paginator->sort('room.code'); ?></th>
                         <th><?php echo $this->Paginator->sort('statustype_id','Status'); ?></th>
-                        <th><?php echo $this->Paginator->sort('qs1'); ?></th>
-                        <th><?php echo $this->Paginator->sort('qs2'); ?></th>
-                        <th><?php echo $this->Paginator->sort('qs3'); ?></th>
-                        <th><?php echo $this->Paginator->sort('qs4'); ?></th>
-                        <th><?php echo $this->Paginator->sort('qs5'); ?></th>
+                        <th><?php echo $this->Paginator->sort('qs1','#1'); ?></th>
+                        <th><?php echo $this->Paginator->sort('qs2','#2'); ?></th>
+                        <th><?php echo $this->Paginator->sort('qs3','#3'); ?></th>
+                        <th><?php echo $this->Paginator->sort('qs4','#4'); ?></th>
+                        <th><?php echo $this->Paginator->sort('qs5','#5'); ?></th>
+                        <th><?php echo $this->Paginator->sort('created'); ?></th>
                         <th class="actions"></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($jobs as $job): ?>
                     <tr>
-                        <td><button class="btn btn-primary btn-circle quickview" data-toggle="modal" data-target="#myModal"><i class="fa fa-list"></i></button>
-                        
+                        <td>
+                        <a class='btn btn-primary btn-circle quickView' data-direction='right'><i class="fa fa-list"></i></a>
                         &nbsp;</td>
 
 
-                        
+                        <td> <?php echo $this->Html->link($job['Job']['id'],
+                          array('action' => 'view', $job['Job']['id']), array('escape' => false)); ?>  &nbsp;</td>
                         <td><?php echo h($job['Job']['description']); ?>&nbsp;</td>
                         <td><?php echo h($job['Building']['code']); ?>&nbsp;</td>
                         <td><?php echo h($job['Room']['code']); ?>&nbsp;</td>
                         <td><?php echo h($job['Statustype']['code']); ?>&nbsp;</td>
-                        <td><?php echo h($job['Job']['qs1']); ?>&nbsp;</td>
-                        <td><?php echo h($job['Job']['qs2']); ?>&nbsp;</td>
-                        <td><?php echo h($job['Job']['qs3']); ?>&nbsp;</td>
-                        <td><?php echo h($job['Job']['qs4']); ?>&nbsp;</td>
-                        <td><?php echo h($job['Job']['qs5']); ?>&nbsp;</td>
+                        <td><?php echo h($job['Qs1']['code']); ?>&nbsp;</td>
+                        <td><?php echo h($job['Qs2']['code']); ?>&nbsp;</td>
+                        <td><?php echo h($job['Qs3']['code']); ?>&nbsp;</td>
+                        <td><?php echo h($job['Qs4']['code']); ?>&nbsp;</td>
+                        <td><?php echo h($job['Qs5']['code']); ?>&nbsp;</td>
+                         <td><?php echo h($job['Job']['created']); ?>&nbsp;</td>
                         <td class="actions">
                            
                           <?php echo $this->Html->link('<span class="glyphicon glyphicon-ok-sign" style="color:#d9534f"></span>',
@@ -74,7 +88,7 @@
             </ul>
             <?php } ?>
 
-        </div> <!-- end col md 9 -->
+   
             </div>
             <!-- /.row -->
         </div>

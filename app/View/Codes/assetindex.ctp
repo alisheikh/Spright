@@ -1,10 +1,12 @@
  <div id="page-wrapper" class='assetIndex'>
                 <div class="panel-heading">
         <h1>Assets</h1>
-        <div class="btn-group">
-            <a href="/assets/create" class="btn btn-success btn-sm">Create Asset</a>
-        </div>
+
     </div>
+
+    <div class="btn-toolbar">
+<a href="/assets/create" class="btn btn-success btn-sm">New Asset</a>
+</div>
             <!-- /.row -->
             <div class="row">
 <div class="col-md-9">
@@ -19,7 +21,7 @@
                         <th><?php echo $this->Paginator->sort('building.code','Building'); ?></th>
                         <th><?php echo $this->Paginator->sort('floor.code','Floor'); ?></th>
                         <th><?php echo $this->Paginator->sort('room.code','Room'); ?></th>
-
+<th><?php echo $this->Paginator->sort('created'); ?></th>
                         <th class="actions"></th>
                     </tr>
                 </thead>
@@ -30,7 +32,8 @@
 
                 foreach ($codes as $code): ?>
                     <tr>
-                        <td><?php echo h($code['Code']['code']); ?></td>
+                        <td><?php echo $this->Html->link($code['Code']['code'],
+                          array('controller'=> 'codes','action' => 'assetview', $code['Code']['id']), array('escape' => false)); ?>  </td>
 
 
                         
@@ -39,15 +42,13 @@
                         <td><?php echo h($code['Building']['code']); ?>&nbsp;</td>
                         <td><?php echo h($code['Floor']['code']); ?>&nbsp;</td>
                         <td><?php echo h($code['Room']['code']); ?>&nbsp;</td>
+                         <td><?php echo h($code['Code']['created']); ?>&nbsp;</td>
 
                         <td class="actions">
                            
                           <?php echo $this->Html->link('<span class="glyphicon glyphicon-search"></span> ',
                           array('controller'=> 'codes','action' => 'assetview', $code['Code']['id']), array('escape' => false)); ?>     
-                          
-                          <button class="glyphicon glyphicon-cross" id="<?php echo $code['Code']['id']; ?>"></button>
-                       
-                        </td>
+                      </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

@@ -9,6 +9,8 @@ App::uses('AppModel', 'Model');
  */
 class Jobtemplate extends AppModel {
 
+	public $displayField = 'code';
+
 /**
  * Validation rules
  *

@@ -14,7 +14,6 @@ App::uses('AppModel', 'Model');
 class Job extends AppModel {
 
 	public $actsAs = array('Containable');
-	
 
 /**
  * Validation rules
@@ -97,35 +96,97 @@ class Job extends AppModel {
 			'foreignKey' => 'user_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
 		),
 		'Jobtype' => array(
 			'className' => 'Jobtype',
 			'foreignKey' => 'jobtype_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
 		),
 		'Room' => array(
 			'className' => 'Room',
 			'foreignKey' => 'room_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
 		),
 		'Statustype' => array(
 			'className' => 'Statustype',
 			'foreignKey' => 'statustype_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+		),
+				'Site' => array(
+			'className' => 'Code',
+			'foreignKey' => 'site_id',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
 		),
 		'Building' => array(
-			'className' => 'Building',
+			'className' => 'Code',
 			'foreignKey' => 'building_id',
 			'conditions' => '',
-			'fields' => '',
-			'order' => ''
+			'fields' => 'code',
+			'order' => '',
+		),
+				'Floor' => array(
+			'className' => 'Code',
+			'foreignKey' => 'floor_id',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),		'Room' => array(
+			'className' => 'Code',
+			'foreignKey' => 'room_id',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),
+				'Asset' => array(
+			'className' => 'Code',
+			'foreignKey' => 'asset_id',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),
+		'Qs1' => array(
+			'className' => 'Question',
+			'foreignKey' => 'qs1',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),
+		'Qs2' => array(
+			'className' => 'Question',
+			'foreignKey' => 'qs2',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),
+		'Qs3' => array(
+			'className' => 'Question',
+			'foreignKey' => 'qs3',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),
+		'Qs4' => array(
+			'className' => 'Question',
+			'foreignKey' => 'qs4',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
+		),
+		'Qs5' => array(
+			'className' => 'Question',
+			'foreignKey' => 'qs5',
+			'conditions' => '',
+			'fields' => 'code',
+			'order' => '',
 		)
 	);
 
@@ -146,7 +207,7 @@ class Job extends AppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'counterQuery' => '',
 		),
 		'Task' => array(
 			'className' => 'Task',
@@ -159,9 +220,8 @@ class Job extends AppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'counterQuery' => '',
 		)
 	);
-
 
 }

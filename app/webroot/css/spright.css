@@ -151,3 +151,151 @@ background-color: #428bca;
     display: block;
     }
 
+
+
+/* Notification BAR  SOURCE: http://notify.dconnell.co.uk/ */;
+#notification {
+    width:  100%;
+    position:  fixed;
+    z-index:  9999999999;
+    left:  0;
+    top:  -50px;
+    padding-top:  10px;
+    padding-bottom:  10px;
+    text-align:  center;
+    font-size:  1.4em;
+    font-weight:  bold;
+    -moz-box-shadow:  0px 5px 5px rgba(0,  0,  0,  0.15);
+    -webkit-box-shadow:  0px 5px 5px rgba(0,  0,  0,  0.15);
+    -o-box-shadow:  0px 5px 5px rgba(0,  0,  0,  0.15);
+    box-shadow:  0px 5px 5px rgba(0,  0,  0,  0.15);
+    border-bottom-width:  3px;
+    border-bottom-style:  solid;
+}
+.ie6 #notification {
+    position: absolute;
+}
+#notification .close {
+    color:  #FFF;
+    width:  20px;
+    height:  20px;
+    position:  absolute;
+    right:  7px;
+    top:  7px;
+    display:  block;
+    text-decoration:  none;
+    border-radius:  5px;
+    line-height:  18px;
+}
+.success {
+    background:  #D4FFCD;
+    border-bottom-color:  #9ADF8F;
+    color:  #258815;
+}
+.success .close {
+    background:  #258815;
+}
+.information {
+    background:  #DBECFF;
+    border-bottom-color:  #9FC7F5;
+    color:  #2850C1;
+}
+.information .close {
+    background:  #2850C1;
+}
+.warning {
+    background:  #FEFCCB;
+    border-bottom-color:  #E5DB55;
+    color:  #878314;
+}
+.warning .close {
+    background:  #878314;
+}
+.error {
+    background:  #FFD2D3;
+    border-bottom-color:  #DF8F90;
+    color:  #871414;
+}
+.error .close {
+    background:  #871414;
+}
+#notification .close:hover {
+    background:  #000;
+}
+
+/* LOGIN PAGE */
+.form-signin
+{
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+.form-signin .form-signin-heading, .form-signin .checkbox
+{
+    margin-bottom: 10px;
+}
+.form-signin .checkbox
+{
+    font-weight: normal;
+}
+.form-signin .form-control
+{
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.form-signin .form-control:focus
+{
+    z-index: 2;
+}
+.form-signin input[type="text"]
+{
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"]
+{
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.account-wall
+{
+    margin-top: 20px;
+    padding: 40px 0px 20px 0px;
+    background-color: #f7f7f7;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.login-title
+{
+    color: #555;
+    font-size: 18px;
+    font-weight: 400;
+    display: block;
+}
+.profile-img
+{
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+.need-help
+{
+    margin-top: 10px;
+}
+.new-account
+{
+    display: block;
+    margin-top: 10px;
+}
