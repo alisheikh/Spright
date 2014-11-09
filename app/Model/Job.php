@@ -119,7 +119,7 @@ class Job extends AppModel {
 			'fields' => '',
 			'order' => '',
 		),
-				'Site' => array(
+		'Site' => array(
 			'className' => 'Code',
 			'foreignKey' => 'site_id',
 			'conditions' => '',
@@ -133,20 +133,20 @@ class Job extends AppModel {
 			'fields' => 'code',
 			'order' => '',
 		),
-				'Floor' => array(
+		'Floor' => array(
 			'className' => 'Code',
 			'foreignKey' => 'floor_id',
 			'conditions' => '',
 			'fields' => 'code',
 			'order' => '',
-		),		'Room' => array(
+		), 'Room' => array(
 			'className' => 'Code',
 			'foreignKey' => 'room_id',
 			'conditions' => '',
 			'fields' => 'code',
 			'order' => '',
 		),
-				'Asset' => array(
+		'Asset' => array(
 			'className' => 'Code',
 			'foreignKey' => 'asset_id',
 			'conditions' => '',

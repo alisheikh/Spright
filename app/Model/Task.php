@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('CakeEvent', 'Event');
 /**
  * Task Model
  *
@@ -7,6 +8,9 @@ App::uses('AppModel', 'Model');
  * @property Statustype $Statustype
  */
 class Task extends AppModel {
+
+	var $actsAs = array('Tools.Linkable');
+
 
 /**
  * Validation rules
@@ -59,14 +63,14 @@ class Task extends AppModel {
 			'foreignKey' => 'job_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
 		),
 		'Statustype' => array(
 			'className' => 'Statustype',
 			'foreignKey' => 'statustype_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
 		)
 	);
 }

@@ -8,8 +8,6 @@ overflow-x: scroll;
 
     .image {
         background-color:#ffcb05;
-
-        cursor:move;
     }
 
         .valid {
@@ -44,36 +42,28 @@ overflow-x: scroll;
 <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Work Planner</h1>
+                    <h1 class="page-header">Work Planners</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
 <div class="container1">
 <div class="row container">
-      
+
+
+<?php  foreach ($users as $user): ?>
 
         <div class="col-xs-6 col-md-4 panel panel-default">
-         <div class="panel-body step" id="001">
-            <div class="image" id="image_21">Image 21</div>
-            <div class="image" id="image_22">Image 22</div>
-            <div class="image" id="image_23">Image 23</div>
+         <div class="panel-body step resource" id="001">
+<?php echo $user['User']['fullname']; ?>
+
+<?php debug($user['Task']); ?>
+
             </div>
         </div>
-        <div class="col-xs-6 col-md-4 panel panel-default">
-         <div class="panel-body step" id="003">
-            <div class="image" id="image_31">Image 31</div>
-            <div class="image" id="image_32">Image 32</div>
-            <div class="image" id="image_33">Image 33</div>
-            </div>
-        </div>
-     <div class="col-xs-6 col-md-4 panel panel-default">
-         <div class="panel-body step" id="003">
-            <div class="image" id="image_31">Image 31</div>
-            <div class="image" id="image_32">Image 32</div>
-            <div class="image" id="image_33">Image 33</div>
-            </div>
-        </div>
+
+<?php endforeach; ?>
+      
 
 
       </div>
@@ -93,18 +83,40 @@ width:80%;
 
 }
 
+.handle{
+    cursor: move;
+}
 
 
 </style>
+
+
+<?php 
+
+function getStatusIcon($status){
+
+switch ($status) {
+  case 1:
+   echo "<i class=\"fa fa-exclamation-triangle\"></i>";
+    break;
+    case 2:
+    echo "<i class=\"fa fa-check\"></i>";
+
+    
+}
+}
+
+?>
+
       <div class="container">----</div>
 
-      <div class="container step scroll" style="background-color:#666;height:300px" id="unscheduled">
+      <div class="container step worklist" style="background-color:#666;height:300px" id="unscheduled">
   
-<?php foreach ($jobs as $job): ?>
+<?php  debug($jobs['Job']['Task']); foreach ($jobs as $job): ?>
 
 
 
-        <div class="image" id="wo_<?php echo $job['Job']['id']; ?>">WO<?php echo $job['Job']['id']; ?></div>
+        <div class="image" id="<?php echo $job['Job']['id']; ?>"><span class="handle"><?php getStatusIcon($job['Job']['statustype_id']); ?></i></span> #<?php echo $job['Job']['id']; ?></div>
 
 <?php endforeach; ?>
 

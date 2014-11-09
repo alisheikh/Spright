@@ -54,7 +54,7 @@
                 $(element).val(value); 
                 case 'text':
                 case 'hidden':
-                $(element).attr("value", '');
+                $(element).val(value); 
                     $(element).attr("value", value);
                   
 

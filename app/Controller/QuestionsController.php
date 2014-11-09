@@ -134,6 +134,10 @@ class QuestionsController extends AppController {
 				'order' => array('lft ASC')
 			));
 
+			//$childCount = $this->Question->childCount($_GET['key'], true);
+
+
+
 		}
 
 		function mapThreaded($source, &$target) {

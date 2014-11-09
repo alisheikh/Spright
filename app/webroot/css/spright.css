@@ -1,4 +1,5 @@
 
+
 /* Ajax Spinner Large */
 #spinner
 {
@@ -28,7 +29,9 @@
  height:400px;
 }
 
-
+table.dataTable tbody tr.selected {
+  background-color: #666;
+}
 
 
 

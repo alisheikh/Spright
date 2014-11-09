@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * Tasks Controller
  *
@@ -13,7 +14,8 @@ class TasksController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+
+	public $components = array('Paginator', 'RequestHandler');
 
 /**
  * index method
@@ -23,6 +25,94 @@ class TasksController extends AppController {
 	public function index() {
 		$this->Task->recursive = 0;
 		$this->set('tasks', $this->Paginator->paginate());
+	}
+
+	function getTasks() {
+		$this->Task->recursive = 2;
+
+		$this->Task->Behaviors->load('Containable');
+
+		// $this->paginate = array('link' => array('Job'));
+
+		$this->paginate = array(
+			'fields' => array('Task.id', 'Task.code', 'Task.job_id'),
+			'conditions' => array(
+				'Task.scheduled' => 1,
+			),
+			'contain' => array(
+				'Job' => array(
+					'fields' => array(
+						'Job.id', 'Job.description',
+					),
+					'Site' => array(
+						'fields' => array(
+							'Site.code',
+						)
+					),
+					'Building' => array(
+						'fields' => array(
+							'Building.code',
+						)
+					),
+					'Floor' => array(
+						'fields' => array(
+							'Floor.code',
+						)
+					),
+					'Room' => array(
+						'fields' => array(
+							'Room.code',
+						)
+					)
+				)
+			)
+
+		);
+
+		$this->DataTable->mDataProp = true;
+		$this->set('response', $this->DataTable->getResponse());
+		$this->set('_serialize', 'response');
+	}
+
+	public function schedule() {
+
+		$this->autoRender = false;
+		$task_id = $this->request->query['job'];
+		$user_id = $this->request->query['resource'];
+
+		if ($this->request->is('get')) {
+
+			$save = $this->Task->updateAll(
+				array('Task.user_id' => $user_id, 'Task.scheduled' => 1, 'Task.statustype_id' => 2),
+				array('Task.id' => $task_id));
+
+			if ($save) {
+				$error = array('SUCCESS' => true, 'DATA' => 'Task Succesfully Scheduled');
+				echo json_encode($error);
+			} else {
+				Configure::write('debug', 1);
+				throw new InternalErrorException('An internal error occured, the job was not scheduled');// 500 error
+			}
+
+		}
+	}
+
+	public function workplanner() {
+		$this->Task->recursive = 2;
+
+		//$this->Job>contain('Task');
+
+		$jobs = $this->Task->find('all', array('order' => array('Job.id DESC')));
+
+		//Load Users into controller as we need to know what jobs we can assign people
+		$this->loadModel('User');
+
+		$this->User->contain('Task');
+		$users = $this->User->find('all', array('conditions' => array('active' => 1)
+		));
+
+		$this->set('tasks', $jobs);
+		$this->set('users', $users);
 	}
 
 /**

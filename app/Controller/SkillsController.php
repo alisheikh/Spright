@@ -13,7 +13,7 @@ class SkillsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 /**
  * index method
@@ -23,6 +23,15 @@ class SkillsController extends AppController {
 	public function index() {
 		$this->Skill->recursive = 0;
 		$this->set('skills', $this->Paginator->paginate());
+	}
+
+	public function getSkills() {
+
+		$json = $this->Skill->find('all', array('fields' => array('id', 'code')));
+		$json = Set::extract('/Skill/.', $json);
+		$this->set('json', $json);
+		$this->set('_serialize', 'json');
+
 	}
 
 /**

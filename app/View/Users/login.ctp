@@ -2,9 +2,8 @@
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
             
-            <div class="account-wall">
-            <h1 class="text-center login-title">Spright.</h1>
-                <img class="profile-img" src="/img/logobox.png"
+            <div class="account-wall" style="text-align:center;">
+                <img  src="/images/logoWide.png" style="padding:0 0 20px 0"
                     alt="Spright logo">
                     <?php echo $this->Session->flash(); ?>
                              <?php

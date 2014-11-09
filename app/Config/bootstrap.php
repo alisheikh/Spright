@@ -26,14 +26,19 @@
 Cache::config('default', array('engine' => 'File'));
 
 CakePlugin::load('DebugKit');
+CakePlugin::load('Tools', array('bootstrap' => true));
+CakePlugin::load('DataTable');
+
 CakePlugin::load('AclExtras');
 
 Configure::write('Dispatcher.filters', array(
-    'AssetDispatcher',
-    'CacheDispatcher'
+	'AssetDispatcher',
+	'CacheDispatcher',
 ));
 
 CakePlugin::load('AssetCompress', array('bootstrap' => true));
+
+
 
 /**
  * The settings below can be used to set additional paths to models, views and controllers.

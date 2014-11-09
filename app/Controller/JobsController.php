@@ -1,5 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
+
+// App::import('Vendor', 'When');
+
 /**
  * Jobs Controller
  *
@@ -15,11 +18,81 @@ class JobsController extends AppController {
  */
 	public $components = array('Paginator', 'RequestHandler');
 
-/**
- * index method
- *
- * @return void
- */
+	/**
+	 * index method
+	 *
+	 * @return void
+	 */
+
+	public function schedule() {
+
+		require_once (APP . 'Vendor' . DS . 'Recurr' . DS . 'autoload.php');
+
+		$timezone = 'Australia/Perth';
+
+		function getIcalDate($time, $incl_time = true) {
+			return $incl_time ? date('Ymd\THis', $time) : date('Ymd', $time);
+		}
+
+		//$this->autoRender = false;
+
+		if ($this->request->is(array('post'))) {
+
+			debug($this->data);
+
+			$startD = $this->data['Job']['startdate'];
+			$endD = NULL;
+			$count = $this->data['Job']['count'];
+			$interval = $this->data['Job']['interval'];
+
+			$interval = (int) $interval;
+			$freq = $this->data['Job']['freq'];
+			$runtime = $this->data['Job']['runtime'];
+
+			$startDate = new \DateTime($startD, new \DateTimeZone($timezone));
+			$endDate = new \DateTime($endD, new \DateTimeZone($timezone));// Optional
+
+			$test = null;
+
+			//Only set an end date if the "on" radio button is selected
+			if ($runtime === 'SCHEDULED'):
+				$endD = $this->data['Job']['enddate'];
+
+				$rule = new \Recurr\Rule("FREQ=$freq;UNTIL=$endD;INTERVAL=$interval", $startDate, $endDate, $timezone);
+			endif;
+
+			if ($runtime === 'NEVER'):
+				$rule = new \Recurr\Rule("FREQ=$freq;INTERVAL=$interval", $startDate, null, $timezone);
+
+			endif;
+
+			if ($runtime === 'COUNT'):
+				$rule = new \Recurr\Rule("FREQ=$freq;COUNT=$count;INTERVAL=$interval", $startDate, null, $timezone);
+			endif;
+
+			$transformer = new \Recurr\Transformer\ArrayTransformer();
+
+//$timezone        = 'America/New_York';
+			//$startDate       = new \DateTime('2013-06-12 20:00:00', new \DateTimeZone($timezone));
+			//$rule            = new \Recurr\Rule('FREQ=MONTHLY;COUNT=5', $startDate, $timezone);
+			$textTransformer = new \Recurr\Transformer\TextTransformer();
+			echo $textTransformer->transform($rule);
+
+			echo "<pre>";
+
+			//echo getIcalDate(time());
+
+			foreach ($transformer->transform($rule)->toArray() as $numObject => $object) {
+
+				echo $object->getStart()->format('Y-m-d H:i:s');
+				echo "<br />";
+			}
+			echo "</pre>";
+
+		}
+
+	}
+
 	public function index() {
 
 		$this->Job->recursive = 0;
@@ -83,21 +156,21 @@ class JobsController extends AppController {
 	}
 
 	public function workplanner() {
-		$this->Job->recursive = 0;
-		$this->set('jobs', $this->Paginator->paginate());
+
+		$jobs = $this->Job->find('all', array('conditions' => array('deleted' => 0), 'fields' => array('id'),
+			'order' => array('id DESC')
+		));
+
+		//Load Users into controller as we need to know what jobs we can assign people
+		$this->loadModel('User');
+
+		$this->User->contain('Task');
+		$users = $this->User->find('all', array('conditions' => array('active' => 1)
+		));
+
+		$this->set('jobs', $jobs);
+		$this->set('users', $users);
 	}
-
-	public function schedule() {
-		$this->autoRender = false;
-
-		debug($_POST['sort']);
-
-		if ($this->RequestHandler->isAjax()) {
-			/*  foreach($_GET['item'] as $order => $id)
-		$this->Feature->id = $id;
-		$this->Feature->saveField('priority', $order);
-		}*/
-		}}
 
 	public function complete() {
 		$this->autoRender = false;
@@ -174,42 +247,65 @@ class JobsController extends AppController {
 
 			if ($this->Job->save($this->request->data)) {
 
-				//What job template does this question row relate to?
-				$this->loadModel('Question');
-				$question = $this->Question->find('first', array('conditions' => array('id' => $this->request->data['Job']['qs1ID'])));
-
-				//Job template ID from find above
-
-				$jobTemplateID = $question['Question']['jobtemplate_id'];
-
 				//We have executed the save, so we need the job ID now to assosiate it to the tasks
 				$lastJobID = $this->Job->getLastInsertID();
 
-				//We know the the job template ID now so lets see what tasks need to be created for it.
-				$this->loadModel('Jobtask');
-				$jobTasks = $this->Jobtask->find('all', array('conditions' => array('jobtemplate_id' => $jobTemplateID)));
+				//What job template does this question row relate to?
+				$this->loadModel('Question');
+				$question = $this->Question->find('first', array('conditions' => array('Question.id' => $this->request->data['Job']['qs1ID'])));
 
-				// debug($jobTasks);
+				//Job template ID from find above
 
-				$this->loadModel('Task');
+				if ($question['Question']['jobtemplate_id']):
+					$jobTemplateID = $question['Question']['jobtemplate_id'];
 
-				foreach ($jobTasks as $jobTask) {
+					//A job template has been assigned to that question set row, so lets see what
+					$this->loadModel('Jobtask');
+					$jobTasks = $this->Jobtask->find('all', array('conditions' => array('jobtemplate_id' => $jobTemplateID)));
 
-					$this->Task->create();
+					if (sizeof($jobTasks <= 1)):
+						$this->loadModel('Task');
+						$this->Task->save(array(
+							'job_id' => $lastJobID,
+							'code' => 'General Task',
+							'skill_id' => 1,
+							'scheduled' => 0,
+							'statustype_id' => 1,
+							'created' => date("Y-m-d H:i:s")
+						));
+					else:
 
+						//Tasks have been found, lets create them all
+						$this->loadModel('Task');
+
+						foreach ($jobTasks as $jobTask) {
+
+							$this->Task->create();
+
+							$this->Task->save(array(
+								'job_id' => $lastJobID,
+								'code' => $jobTask['Jobtask']['code'],
+								'skill_id' => $jobTask['Jobtask']['skill_id'],
+								'scheduled' => 0,
+								'statustype_id' => 1,
+								'created' => date("Y-m-d H:i:s")
+							));
+						}
+
+					endif;
+				else:
+					//Questionset has no custom template assigned, so lets use the default "general" template
+					$this->loadModel('Task');
 					$this->Task->save(array(
 						'job_id' => $lastJobID,
-						'code' => $jobTask['Jobtask']['code'],
-						'skill_id' => $jobTask['Jobtask']['skill_id'],
+						'code' => 'General Task',
+						'skill_id' => 1,
 						'scheduled' => 0,
 						'statustype_id' => 1,
 						'created' => date("Y-m-d H:i:s")
 					));
 
-				}
-
-				//$this->Model->create(); // Create a new record
-				//$this->Model->save($row); // And save it
+				endif;
 
 				$this->Session->setFlash(__('Your job has been raised'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'edit', $this->Job->id));

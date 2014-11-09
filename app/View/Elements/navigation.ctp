@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html"><img src="/images/logo.png" alt="Spright. Logo"></a>
+        <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="Spright. Logo"></a>
     </div>
     <!-- /.navbar-header -->
 
@@ -131,13 +131,25 @@
                         <a href="/jobs/">Work Order List</a>
                     </li>
                     <li>
-                        <a href="/jobs/workplanner">Work Planner</a>
+                        <a href="/tasks/workplanner">Work Planner</a>
                     </li>
 
 
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
+                        <li>
+            <a href="/room-booking"><i class="fa fa-calendar"></i> Scheduled Work<span class="fa arrow"></span></a>
+                         <ul class="nav nav-second-level">
+                    <li>
+                        <a href="/schedules/create">Create Schedule</a>
+                    </li>
+                    <li>
+                        <a href="/schedules">Schedules</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
             <li>
             <a href="/room-booking"><i class="fa fa-book fa-fw"></i> Room Booking<span class="fa arrow"></span></a>
                          <ul class="nav nav-second-level">

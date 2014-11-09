@@ -10,7 +10,9 @@ App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
  */
 class User extends AppModel {
 
-	public $actsAs = array('Acl' => array('type' => 'requester'));
+	public $actsAs = array('Containable', 'Acl' => array('type' => 'requester'));
+
+	var $hasAndBelongsToMany = array('Skill');
 
 	public function parentNode() {
 		if (!$this->id && empty($this->data)) {
@@ -35,14 +37,12 @@ class User extends AppModel {
  */
 	public $displayField = 'username';
 
-    public function beforeSave($options = array()) {
-        $this->data['User']['password'] = AuthComponent::password(
-          $this->data['User']['password']
-        );
-        return true;
-    }
-
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
+	public function beforeSave($options = array()) {
+		$this->data['User']['password'] = AuthComponent::password(
+			$this->data['User']['password']
+		);
+		return true;
+	}
 
 /**
  * belongsTo associations
@@ -51,11 +51,11 @@ class User extends AppModel {
  */
 	public $belongsTo = array(
 		'Group' => array(
-			'className'  => 'Group',
+			'className' => 'Group',
 			'foreignKey' => 'group_id',
 			'conditions' => '',
-			'fields'     => '',
-			'order'      => '',
+			'fields' => '',
+			'order' => '',
 		)
 	);
 
@@ -66,29 +66,29 @@ class User extends AppModel {
  */
 	public $hasMany = array(
 		'Job' => array(
-			'className'    => 'Job',
-			'foreignKey'   => 'user_id',
-			'dependent'    => false,
-			'conditions'   => '',
-			'fields'       => '',
-			'order'        => '',
-			'limit'        => '',
-			'offset'       => '',
-			'exclusive'    => '',
-			'finderQuery'  => '',
+			'className' => 'Job',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
 			'counterQuery' => '',
 		),
 		'Task' => array(
-			'className'    => 'Task',
-			'foreignKey'   => 'user_id',
-			'dependent'    => false,
-			'conditions'   => '',
-			'fields'       => '',
-			'order'        => '',
-			'limit'        => '',
-			'offset'       => '',
-			'exclusive'    => '',
-			'finderQuery'  => '',
+			'className' => 'Task',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
 			'counterQuery' => '',
 		)
 	);

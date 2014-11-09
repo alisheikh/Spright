@@ -1,0 +1,11 @@
+/test/app/tmp/sessions/
+/test/app/tmp/tests/
+/test/app/tmp/cache/
+/test/app/tmp/logs/
+/app/tmp/sessions/
+/app/tmp/cache/
+/app/tmp/tests/
+/app/tmp/logs/
+/app/Config/database.php
+/nbproject/
+/test/app/Config/database.php

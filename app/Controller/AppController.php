@@ -33,7 +33,7 @@ App::uses('Controller', 'Controller');
 
 class AppController extends Controller {
 
-	public $components = array(
+	public $components = array('DataTable', 'DebugKit.Toolbar',
 		'Acl',
 		'Auth' => array(
 			'authorize' => array(
@@ -45,6 +45,9 @@ class AppController extends Controller {
 	public $helpers = array('Html', 'Form', 'Session', 'AssetCompress.AssetCompress');
 
 	public function beforeFilter() {
+
+		Configure::write('current_controller', $this->name);
+
 		$this->Auth->allow();
 
 		$this->layout = 'spright';
