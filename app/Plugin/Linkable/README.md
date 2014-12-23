@@ -1,114 +1,137 @@
-# Linkable Plugin
-CakePHP plugin, PHP 5
+# CakePHP Linkable Behavior #
 
-## Introduction ##
+Linkable behavior is a companion for the CakePHP built-in containable behavior. It helps fill the gaps that are
+not covered by containable: You will be able to contain association that are not directly associated with your model
+and to generate queries joining all specified models.
 
-Linkable is a lightweight approach for data mining on deep relations between models. Joins tables based on model relations to easily enable right to left find operations.
+This is particularly useful when you want to filter results by conditions in a hasMany or hasAndBelongsToMany relationship.
 
-## Requirements ##
-- CakePHP 1.2.x or 1.3.x
-- PHP 5
-
-## Installation ##
-
-1. [Download] the latest release for your version of CakePHP or clone the Github repository
-
-2. Place the files in a directory called 'linkable' inside the *app/plugins* directory of your CakePHP project.
-
-3. Add the LinkableBehavior to a model or your AppModel:
-
-    var $actsAs = array('Linkable.Linkable');
-
-## Usage ##
-
-Use it as a option to a find call. For example, getting a Post record with their associated (belongsTo) author User record:
-
-    $this->Post->find('first', array(
-		'link'	=> array(
-			'User'
-		)
-	));
-
-This returns a Post record with it's associated User data. However, this isn't much different from what you can do Containable, and with the same amount of queries. Things start to change when linking hasMany or hasAndBelongsToMany associations.
-
-Because Linkable uses joins instead of seperate queries to get associated models, it is possible to apply conditions that operate from right to left (Tag -> Post) on hasMany and hasAndBelongsToMany associations.
-
-For example, finding all posts with a specific tag (hasAndBelongsToMany assocation):
-
-    $this->Post->find('all', array(
-		'conditions'	=> array(
-			'Tag.name'	=> 'CakePHP'
-		),
-		'link'	=> array(
-			'Tag'
-		)
-	));
-
-But what if you would still like all associated tags for the posts, while still applying the condition from the previous example? Fortunately, Linkable works well together with Containable. This example also shows some of the options Linkable has:
-
-    $this->Post->find('all', array(
-		'conditions'	=> array(
-			'TagFilter.name'	=> 'CakePHP'
-		),
-		'link'	=> array(
-			'PostsTag'	=> array(
-				'TagFilter'	=> array(
-					'class'			=> 'Tag',
-					'conditions'	=> 'TagFilter.id = PostsTag.tag_id',	// Join condition (LEFT JOIN x ON ...)
-					'fields'		=> array(
-						'TagFilter.id'
-					)
-				)
-			)
-		),
-        'contain'	=> array(
-			'Tag'
-		)
-	));
-
-If you're thinking: yeesh, that is a lot of code, then I agree with you ;). Linkable's automagical handling of associations with non-standard names has room for improvement. Please, feel free to contribute to the project via GitHub.
-
-### Pagination ###
-
-As a last example, pagination. This will find and paginate all posts with the tag 'CakePHP':
-
-    $this->paginate = array(
-        'fields'    => array(
-            'title'
-        ),
-        'conditions'	=> array(
-			'Tag.name'	=> 'CakePHP'
-		),
-		'link'	=> array(
-			'Tag'
-		)
-        'limit' => 10
-    );
-
-    $this->paginate('Post');
-
-### Notes ##
-
-When fetching data in right to left operations, meaning in "one to many" relations (hasMany, hasAndBelongsToMany), it should be used in the opposite direction ("many to one"), i.e:
-
-To fetch all Users assigned to a Project:
-
-    $this->Project->find('all', array('link' => 'User', 'conditions' => 'project_id = 1'));
-This won't produce the desired result as only a single user will be returned.
-
-    $this->User->find('all', array('link' => 'Project', 'conditions' => 'project_id = 1'));
-This will fetch all users related to the specified project in one query.
-
-## Authors ##
-- Originally authored by: Rafael Bandeira (rafaelbandeira3 (at) gmail (dot) com), http://rafaelbandeira3.wordpress.com
-- Maintained by: Arjen Verstoep (terr (at) terr (dot) nl), https://github.com/Terr
-- giulianob, https://github.com/giulianob
-- Chad Jablonski, https://github.com/cjab
-- Nathan Porter, https://github.com/n8man
-
-## License ##
+Original behavior by rafaelbandeira3 on GitHub.
 
 Licensed under The MIT License
 Redistributions of files must retain the above copyright notice.
 
-[Download]: https://github.com/Terr/linkable/downloads
+## Requirements ##
+
+* CakePHP 2.x
+* PHP 5.2+
+
+## Installation ##
+
+If you are using composer, add this to your composer.json file:
+```json
+	{
+		"extra": {
+			"installer-paths": {
+				"Plugin/Linkable": ["lorenzo/linkable"]
+		}
+	},
+		"require" : {
+			"lorenzo/linkable": "master"
+		}
+	}
+```
+
+Otherwise just clone this repository inside your app/Plugin folder:
+
+git clone git://github.com/lorenzo/linkable.git Plugin/Linkable
+
+### Enable plugin
+
+You need to enable the plugin your `app/Config/bootstrap.php` file:
+
+CakePlugin::load('Linkable');
+
+### Configuration
+
+To use this behavior, add it to your AppModel:
+```php
+	<?php
+		class AppModel extends Model {
+		
+			public $actsAs = array('Containable', 'Linkable.Linkable');
+		
+	}
+```
+
+## Usage
+
+Here's an example using both linkable
+```php
+	<?php
+	$this->TestRun->CasesRun->find('all', array(
+		'link' => array(
+			'User' => array('fields' => 'username'),
+			'TestCase' => array('fields' => array('TestCase.automated', 'TestCase.name'),
+				'TestSuite' => array('fields' => array('TestSuite.name'),
+					'TestHarness' => array('fields' => array('TestHarness.name'))
+					)
+				)
+			),
+		'conditions' => array('test_run_id' => $id),
+		'contain' => array(
+			'Tag'
+			),
+		'fields' => array(
+			'CasesRun.id', 'CasesRun.state', 'CasesRun.modified', 'CasesRun.comments'
+			)
+		));
+```
+Relatioships:
+
+* CasesRun is the HABTM table of TestRun <-> TestCases
+* CasesRun belongsTo TestRun
+* CasesRun belongsTo User
+* CasesRun belongsTo TestCase
+* TestCase belongsTo TestSuite
+* TestSuite belongsTo TestHarness
+* CasesRun HABTM Tags
+
+
+Output SQL:
+```sql
+	SELECT `CasesRun`.`id`, `CasesRun`.`state`, `CasesRun`.`modified`, `CasesRun`.`comments`, `User`.`username`, `TestCase`.`automated`, `TestCase`.`name`, `TestSuite`.`name`, `TestHarness`.`name` FROM `cases_runs` AS `CasesRun` LEFT JOIN `users` AS `User` ON (`User`.`id` = `CasesRun`.`user_id`) LEFT JOIN `test_cases` AS `TestCase` ON (`TestCase`.`id` = `CasesRun`.`test_case_id`) LEFT JOIN `test_suites` AS `TestSuite` ON (`TestSuite`.`id` = `TestCase`.`test_suite_id`) LEFT JOIN `test_harnesses` AS `TestHarness` ON (`TestHarness`.`id` = `TestSuite`.`test_harness_id`) WHERE `test_run_id` = 32
+
+	SELECT `Tag`.`id`, `Tag`.`name`, `CasesRunsTag`.`id`, `CasesRunsTag`.`cases_run_id`, `CasesRunsTag`.`tag_id` FROM `tags` AS `Tag` JOIN `cases_runs_tags` AS `CasesRunsTag` ON (`CasesRunsTag`.`cases_run_id` IN (345325, 345326, 345327, 345328) AND `CasesRunsTag`.`tag_id` = `Tag`.`id`) WHERE 1 = 1
+```
+If you were to try this example with containable, you would find that it generates a lot of queries to fetch all of the data records. Linkable produces a single query with joins instead.
+
+
+### Filtering a parent model by records in a child model:
+```php
+<?php
+$this->Article->find('all', array(
+	'contain' => array(
+		'Author'
+	),
+	'link' => array(
+		'Comment'
+	),
+	'conditions' => array(
+		'Comment.user_id' => 1
+	)
+));
+```
+
+Previous example will bring all articles having a comment done by user 1. Please notice that if there is more than one comment
+per article done by such user, this query will actually return an Article record per each comment made. This is because Linkable
+will use a single query using joins.
+
+### version 1.1.1
+
+- Using inner joins for filtering queries
+- Bug fixes
+
+### version 1.1:
+- Brought in improvements and test cases from Terr. However, THIS VERSION OF LINKABLE IS NOT DROP IN COMPATIBLE WITH Terr's VERSION!
+- If fields aren't specified, will now return all columns of that model
+- No need to specify the foreign key condition if a custom condition is given. Linkable will automatically include the foreign key relationship.
+- Ability to specify the exact condition Linkable should use. This is usually required when doing on-the-fly joins since Linkable generally assumes a belongsTo relationship when no specific relationship is found and may produce invalid foreign key conditions. Example:
+
+	$this->Post->find('first', array('link' => array('User' => array('conditions' => array('exactly' => 'User.last_post_id = Post.id')))))
+
+- Linkable will no longer break queries that use SQL COUNTs
+
+
+### More examples
+Look into the unit tests for some more ways of using Linkable

@@ -1,33 +1,38 @@
 
-<?php
-//debug($job);
+                      <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+     
+     <?php echo $this->element('contentHeader', array(
+         'title'=> $pageTitle,
+         'saveBtn'=> true,
+     //    'editBtn'=> true,
+       //  'editBtnTarget'=> '/job/edit/' . $this->data['Job']['id'], //Provice reletive URL
+         'sticky'=> true,
+         
+     )); 
 
-?>
+     debug($this->data);    
+     ?>
 
-<div id="page-wrapper">
+
+                <!-- Main content -->
+                <section class="content">
+
             <div class="row">
-                <div class="col-lg-12">
 
 
-                    <h1><span class="btn btn-info" type="button"><?php echo $job['Statustype']['code']; ?> </span> Details <small>WO<?php echo $job['Job']['id']; ?></small>
-<a href="#" class="btn btn-primary pull-right save"><i class="fa fa-pencil"></i> Edit</a>
-                    </h1>
 
 
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                   
-                      
-                        <div class="panel-body">
-                            <div class="row">
-                               
 
-                            <!-- Nav tabs -->
-                            <ul id="tabs" class="nav nav-tabs">
+
+                                    <div class="col-xs-12">
+                            <div class="nav-tabs-custom">
+
+
+
+      
+
+                <ul id="tabs" class="nav nav-tabs">
                                 
                                 <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
                                 <li><a href="#tasks" data-toggle="tab">Tasks</a></li>
@@ -40,68 +45,65 @@
                                 <div class="tab-pane fade in active" id="details">
                                     <h4></h4>
 
+                                   
+
+
+                                      <?php echo $this->Form->create('Job', array(
+    'inputDefaults' => array(
+        'div' => 'form-group',
+        'label' => array(
+            'class' => 'col col-md-3 control-label'
+        ),
+        'wrapInput' => 'col col-md-9',
+        'class' => 'form-control'
+    ),
+    'class' => 'form-horizontal raiseJobForm jobAttributes'
+)); ?> 
+
+
+
+                                    <?php echo $this->Form->hidden('id');?>
 
                                        <div class="row" style="padding:20px">
-                                <div class="col-md-6"><div class="form-group">
-					<?php echo $this->Form->input('fullname', array('class' => 'form-control', 'value' => $job['Job']['fullname'],'label'=>'Requestor', 'disabled' => 'disabled'));?>
-				</div>
-					<div class="form-group">
-					<?php echo $this->Form->input('email', array('class' => 'form-control', 'value' => $job['Job']['email'],'label'=>'Email', 'disabled' => 'disabled'));?>
-				</div>
-					<div class="form-group">
-					<?php echo $this->Form->input('phone', array('class' => 'form-control', 'placeholder' => 'User Id','label'=>'Phone', 'value' => $job['Job']['phone'],'disabled' => 'disabled'));?>
-				</div>
-							    <div class="form-group">
-                   <?php echo $this->Form->input('Site.code', array('class' => 'form-control', 'value' => $job['Site']['code'],'label'=>'Site', 'disabled' => 'disabled'));?>
-                </div>
-			    <div class="form-group">
-                   <?php echo $this->Form->input('Building.code', array('class' => 'form-control', 'value' => $job['Building']['code'],'label'=>'Building', 'disabled' => 'disabled'));?>
-                </div>
-
-			    <div class="form-group">
-                   <?php echo $this->Form->input('Floor.code', array('class' => 'form-control', 'value' => $job['Floor']['code'],'label'=>'Floor', 'disabled' => 'disabled'));?>
-                </div>
-                			    <div class="form-group">
-                   <?php echo $this->Form->input('Room.code', array('class' => 'form-control', 'value' => $job['Room']['code'],'label'=>'Room', 'disabled' => 'disabled'));?>
-                </div>
-
-				
-		
-				</div>
                                 <div class="col-md-6">
-                                <div class="form-group">
-					<?php echo $this->Form->input('Jobtype.code', array('class' => 'form-control', 'value' => $job['Jobtype']['code'],'label'=>'Job Type','disabled' => 'disabled'));?>
-				</div>
-				<div class="form-group">
-					<?php echo $this->Form->input('code', array('class' => 'form-control', 'value' => $job['Asset']['code'],'label'=>'Asset','disabled' => 'disabled'));?>
-				</div>
+                    <?php echo $this->Form->input('fullname', array('label'=>'Requestor', 'disabled' => 'disabled','id'=>'Job.fullnameDISABLED'));?>
 
-                                <div class="form-group">
-					<?php echo $this->Form->input('qs1', array('class' => 'form-control', 'label' => 'Questions' , 'disabled' => 'disabled', 'value' => $job['Qs1']['code']));?>
-				</div>
-				<div class="form-group">
-					<?php if($job['Job']['qs2']) echo $this->Form->input('qs2', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs2']['code']));?>
-				</div>
-				<div class="form-group">
-					<?php if($job['Job']['qs3']) echo $this->Form->input('qs3', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs3']['code']));?>
-				</div>
-				<div class="form-group">
-					<?php if($job['Job']['qs4']) echo $this->Form->input('qs4', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs4']['code']));?>
-				</div>
-				<div class="form-group">
-					<?php if($job['Job']['qs5']) echo $this->Form->input('qs5', array('class' => 'form-control', 'label' => false, 'value' => $job['Qs5']['code']));?>
-				</div>
+                    <?php echo $this->Form->input('email', array('placeholder' => 'User Id','label'=>'Email'));?>
 
-				<div class="form-group">
-					<?php echo $this->Form->input('description', array('type'=>'textarea','class' => 'form-control', 'value' => $job['Job']['description'],'label'=>'Description','disabled' => 'disabled'));?>
-				</div>
-				</div>
+                    <?php echo $this->Form->input('phone', array('placeholder' => 'User Id','label'=>'Phone'));?>
+
+                    <?php echo $this->Form->input('site_id'); ?>
+
+                    <?php echo $this->Form->input('building_id'); ?>
+
+                    <?php echo $this->Form->input('floor_id'); ?>
+
+                    <?php echo $this->Form->input('room_id');?>
+
+                    <?php echo $this->Form->input('description', array('placeholder' => 'Description'));?>
+
+                    <?php echo $this->Form->input('statustype_id', array('label' => 'Status'));?>
+                </div>
+                                <div class="col-md-6">
+
+                    <?php echo $this->Form->input('Qs1.code', array('label' => 'Questions' , 'disabled' => 'disabled'));?>
+
+                    <?php if($this->data['Job']['qs2']) echo $this->Form->input('Qs2.code', array('label' => ' ', 'disabled' => 'disabled'));?>
+
+                    <?php if($this->data['Job']['qs3']) echo $this->Form->input('Qs3.code', array('label' => ' ', 'disabled' => 'disabled'));?>
+
+                    <?php if($this->data['Job']['qs4']) echo $this->Form->input('Qs4.code', array('label' => ' ', 'disabled' => 'disabled'));?>
+
+                    <?php if($this->data['Job']['qs5']) echo $this->Form->input('Qs5.code', array('label' => ' ', 'disabled' => 'disabled'));?>
+                </div>
+
+                    
+
+                </div>
                             </div>
 
-			
+            
 
-                                   
-                                </div>
                                 <div class="tab-pane fade" id="tasks">
                                 <br />
 <!-- Tasks -->
@@ -112,27 +114,30 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Task</th>
                                             <th>Scheduled</th>
-                                            
+                                            <th>Resource</th>
                                             <th>Created</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                <?php foreach ($job['Task'] as $task): ?>    
+                                <?php debug($this->data['Task']); ?>
+                                <?php foreach ($this->data['Task'] as $task): ?>    
                                     
                                         <tr>
-                                            
+                                             <td><?php echo $task['id']; ?></td>
                                             <td><?php echo $task['code']; ?></td>
                                             <td> 
-                                                  <?php if ($task['scheduled' ]===0): ?>
-                                             <?php  echo $task['user_id']; ?></i>
+                                            <?php if ($task['scheduled']): ?>
+                                             <i class="fa fa-check" style="color:green"></i>
                                             <?php else: ?>
                                                  <i class="fa fa-times" style="color:red"></i>
                                             <?php endif; ?>
                                             
                                             </td>
+                                             <td><?php if (!$task['scheduled']): echo "-"; else: echo "TO DO"; endif; ?></td>
                                             <td><?php echo $task['created']; ?></td>
                                             
     
@@ -160,36 +165,47 @@
 
                                 </div>
                                 <div class="tab-pane fade" id="complete">
-                                    <h4></h4>
-<?php echo $this->Form->create('Job', array('role' => 'form','action'=>'complete')); ?>
-        <?php echo $this->Form->hidden('id', array('class' => 'form-control', 'value' => $job['Job']['id']));?>
-<div class="form-group">
+
+   <div class="row" style="padding:20px">
+                                <div class="col-md-8">
+
 <label>Completion time</label>
-					<div class="input-group date form_datetime" style="max-width:30%" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                    <input class="form-control" size="16" type="text" value="" readonly="" id="JobCompletiondate" name="data[Job][completiondate]">
+                    <div class="input-group date form_datetime" style="max-width:30%" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+      <input class="form-control" size="16" type="text" value="" readonly="" id="JobCompletiondate" name='data[Job][completiondate]'>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
-				</div>
 
+<?php echo $this->Form->input('completioncomments', array('placeholder' => 'What did you do to resolve this work order?','label'=>'Completion comments','type'=>'textarea'));?>
+</div>
+</div>
+                               
 
-                                    	<div class="form-group">
-					<?php echo $this->Form->input('completioncomments', array('class' => 'form-control', 'placeholder' => 'What did you do to resolve this work order?','label'=>'Completion comments','type'=>'textarea'));?>
-				</div>
-
-				<button type="submit" class="btn btn-success btn-lg btn-block"><i class="fa fa-check"></i> Complete</button>
-                     <?php echo $this->Form->end() ?>            
+                                 
                                 </div>
                     
                             </div>
                             
-                      
+                            <?php echo $this->Form->end() ?>
              
         
             </div>
+ </div>
+   </div>
+   </div>
+            </div>
             <!-- /.row -->
         </div>
-        <!-- /#page-wrapper -->
+
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+
+
+
+
+
+
+
 
 
 

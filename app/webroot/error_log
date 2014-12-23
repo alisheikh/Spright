@@ -1,1 +1,22 @@
-[09-Nov-2014 02:40:27 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/schedule.ctp on line 14
+[16-Dec-2014 11:50:08 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/CodesController.php on line 502
+[17-Dec-2014 11:26:46 UTC] PHP Parse error:  syntax error, unexpected '=', expecting ')' in /home/mwsyscom/public_html/cafmworks/app/View/Codes/assetview.ctp on line 64
+[17-Dec-2014 12:59:38 UTC] PHP Parse error:  syntax error, unexpected ''Code' (T_ENCAPSED_AND_WHITESPACE), expecting ']' in /home/mwsyscom/public_html/cafmworks/app/Controller/CodesController.php on line 206
+[19-Dec-2014 13:18:46 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 87
+[19-Dec-2014 13:18:57 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 87
+[19-Dec-2014 13:46:12 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ':' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 133
+[19-Dec-2014 14:31:37 UTC] PHP Parse error:  syntax error, unexpected ''sticky'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 11
+[19-Dec-2014 14:32:12 UTC] PHP Parse error:  syntax error, unexpected ''sticky'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 11
+[20-Dec-2014 01:53:51 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 168
+[20-Dec-2014 02:01:13 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 215
+[20-Dec-2014 02:01:14 UTC] PHP Parse error:  syntax error, unexpected '=', expecting ')' in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 355
+[20-Dec-2014 02:02:34 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 466
+[20-Dec-2014 02:09:26 UTC] PHP Parse error:  syntax error, unexpected ''' (T_ENCAPSED_AND_WHITESPACE), expecting ']' in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 121
+[20-Dec-2014 02:10:00 UTC] PHP Parse error:  syntax error, unexpected ''' (T_ENCAPSED_AND_WHITESPACE), expecting ']' in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 121
+[20-Dec-2014 02:10:02 UTC] PHP Parse error:  syntax error, unexpected ''' (T_ENCAPSED_AND_WHITESPACE), expecting ']' in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 121
+[21-Dec-2014 12:28:54 UTC] PHP Fatal error:  Class 'AppController' not found in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 12
+[21-Dec-2014 14:18:20 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 72214 bytes) in /home/mwsyscom/public_html/cafmworks/lib/Cake/Cache/Engine/FileEngine.php on line 135
+[22-Dec-2014 10:29:03 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ',' or ';' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 76
+[22-Dec-2014 14:03:44 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/TasksController.php on line 169
+[22-Dec-2014 14:04:32 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/TasksController.php on line 169
+[23-Dec-2014 11:12:29 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/mwsyscom/public_html/cafmworks/app/Controller/JobsController.php on line 169
+[23-Dec-2014 12:04:04 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/mwsyscom/public_html/cafmworks/app/View/Jobs/view.ctp on line 14

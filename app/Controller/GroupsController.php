@@ -60,7 +60,7 @@ class GroupsController extends AppController {
 				//	$group = $this->Group->id = $this->Group->getLastInsertID();
 				//	$this->Acl->deny($group, 'controllers');
 
-				$this->Acl->deny($group, 'controllers');
+			//	$this->Acl->deny($group, 'controllers');
 				$this->Session->setFlash(__('The group has been saved.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));
 			} else {

@@ -16,6 +16,9 @@ class JobviewsController extends AppController {
 			'fields' => array('DT_RowId', 'JobID', 'description', 'fullname',
 				'SiteCode', 'BuildingCode', 'FloorCode', 'RoomCode', 'TaskCode',
 				'qs1', 'qs2', 'qs3', 'qs4', 'qs5', 'Status', 'requester', 'created'),
+			'conditions' => array(
+            'scheduled'=>0
+        ),
 			 'order' => array(
             'DT_RowId' => 'desc'
         )

@@ -31,26 +31,53 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 
+//'DebugKit.Toolbar,'
 class AppController extends Controller {
 
-	public $components = array('DataTable', 'DebugKit.Toolbar',
+	public $components = array('DataTable','DebugKit.Toolbar',
 		'Acl',
 		'Auth' => array(
 			'authorize' => array(
-				'Actions' => array('actionPath' => 'controllers')
-			)
+				'Actions' => array('actionPath' => 'controllers'),
+			),
 		),
-		'Session'
+		'Session',
 	);
-	public $helpers = array('Html', 'Form', 'Session', 'AssetCompress.AssetCompress');
+
+	public $helpers = array(
+		'Session',
+		'Html' => array('className' => 'BoostCake.BoostCakeHtml'),
+		'Form' => array('className' => 'BoostCake.BoostCakeForm'),
+		'Paginator' => array('className' => 'BoostCake.BoostCakePaginator'),
+	);
+
+	public function recordActivity() {
+
+		$user_id = $this->Auth->user('id');
+
+		if ($user_id):
+
+			$this->loadModel('User');
+
+			$data = array(
+				'id' => $user_id,
+				'lastactive' => date('Y-m-d H:i:s'),
+				'modified' => false,
+			);
+
+			$this->User->save($data, array('callbacks' => false, 'validate' => false));
+		endif;
+	}
 
 	public function beforeFilter() {
 
 		Configure::write('current_controller', $this->name);
 
+		$this->recordActivity();
+
 		$this->Auth->allow();
 
-		$this->layout = 'spright';
+		$this->layout = 'sprightv2';
 
 		//Configure AuthComponent
 		$this->Auth->loginAction = array(

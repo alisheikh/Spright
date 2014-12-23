@@ -132,7 +132,7 @@ class DataTableComponent extends Component {
 		// execute sql select
 		$data = $this->model->find('all', $parameters);
 
-        //Remove the model name from the JSON output. Needed for DT_RowId to work correctly. http://www.datatables.net/examples/server_side/ids.html
+		//Remove the model name from the JSON output. Needed for DT_RowId to work correctly. http://www.datatables.net/examples/server_side/ids.html
 		$removeName = Configure::read('current_controller');
 		$removeName = rtrim($removeName, "s");
 		$data = Set::extract('/' . $removeName . '/.', $data);
@@ -144,7 +144,7 @@ class DataTableComponent extends Component {
 			'sEcho' => isset($this->controller->request->query['sEcho']) ? intval($this->controller->request->query['sEcho']) : 1,
 			'iTotalRecords' => $total,
 			'iTotalDisplayRecords' => $isFiltered === true ? $filteredTotal : $total,
-			'aaData' => array()
+			'aaData' => array(),
 		);
 
 		// return data
@@ -326,7 +326,7 @@ class DataTableComponent extends Component {
 				}
 			}
 			// will try to include all results but this will likely not work for you
-			else{
+			else {
 				$fields["$key.$x "] = "$i";
 			}
 		}
@@ -382,7 +382,7 @@ class DataTableComponent extends Component {
 
 		if (isset($this->settings) && isset($this->settings['timer']) && $this->settings['timer'] == true) {
 			$times['TOTAL'] = array(
-				'time' => round(($end - $componentStart), 4)
+				'time' => round(($end - $componentStart), 4),
 			);
 		}
 

@@ -22,6 +22,8 @@
  * Spright Configurations
  */
 
+Configure::write('timezone', 'Pizza, Inc.');
+
 /*
  * CakePHP Debug Level:
  *
@@ -55,7 +57,7 @@ Configure::write('debug', 2);
 Configure::write('Error', array(
 	'handler' => 'ErrorHandler::handleError',
 	'level' => E_ALL &~E_DEPRECATED,
-	'trace' => true
+	'trace' => true,
 ));
 
 /**
@@ -81,7 +83,7 @@ Configure::write('Error', array(
 Configure::write('Exception', array(
 	'handler' => 'ErrorHandler::handleException',
 	'renderer' => 'ExceptionRenderer',
-	'log' => true
+	'log' => true,
 ));
 
 /**
@@ -279,7 +281,7 @@ Configure::write('Acl.database', 'default');
  * then the value of `Config.timezone` will be used. This feature allows you to set users' timezone just
  * once instead of passing it each time in function calls.
  */
-//Configure::write('Config.timezone', 'Europe/Paris');
+Configure::write('Config.timezone', 'Australia/Perth');
 
 /**
  * Cache Engine Configuration
@@ -374,7 +376,7 @@ Cache::config('_cake_core_', array(
 	'prefix' => $prefix . 'cake_core_',
 	'path' => CACHE . 'persistent' . DS,
 	'serialize' => ($engine === 'File'),
-	'duration' => $duration
+	'duration' => $duration,
 ));
 
 /**
@@ -386,5 +388,5 @@ Cache::config('_cake_model_', array(
 	'prefix' => $prefix . 'cake_model_',
 	'path' => CACHE . 'models' . DS,
 	'serialize' => ($engine === 'File'),
-	'duration' => $duration
+	'duration' => $duration,
 ));

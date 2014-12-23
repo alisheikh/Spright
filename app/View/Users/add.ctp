@@ -1,39 +1,62 @@
- <div id="page-wrapper" class='createUser'>
-    <div class="panel-heading">
-        <h1>Create User</h1>
+              <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+     
+     <?php echo $this->element('contentHeader', array(
+         'title'=> $pageTitle,
+         'saveBtn'=> true,
+       //  'addBtn'=> true,
+       //  'addBtnTarget'=> '/users/add/' //Provice reletive URL
+     )); ?>
+  
 
-    </div>
-    <!-- /.row -->
-    <div class="row">
-       <div class="col-md-6">
-            			<?php echo $this->Form->create('User', array('role' => 'form')); ?>
+                <!-- Main content -->
+                <section class="content">
+                <div class="col-md-8">
 
-				<div class="form-group">
-					<?php echo $this->Form->input('username', array('class' => 'form-control', 'placeholder' => 'Username'));?>
-				</div>
-				<div class="form-group">
-					<?php echo $this->Form->input('password', array('class' => 'form-control', 'placeholder' => 'Password'));?>
-				</div>
-				<div class="form-group">
-					<?php echo $this->Form->input('group_id', array('class' => 'form-control', 'placeholder' => 'Role','label'=>'Role'));?>
-				</div>
-				<div class="form-group">
-					<?php echo $this->Form->input('fullname', array('class' => 'form-control', 'placeholder' => 'Full name'));?>
-				</div>
-				<div class="form-group">
-					<?php echo $this->Form->input('email', array('class' => 'form-control', 'placeholder' => 'Email address'));?>
-				</div>
-				<div class="form-group">
-					<?php echo $this->Form->input('contact', array('class' => 'form-control', 'placeholder' => 'Contact number'));?>
-				</div>
+            <div class="row">
 
-				<div class="form-group">
-					 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-				</div>
+                                    <div class="col-xs-12">
+                            <div class="box">
+
+
+<div class="box-body">
+
+   			                            <?php echo $this->Form->create('User', array(
+    'inputDefaults' => array(
+        'div' => 'form-group',
+        'label' => array(
+            'class' => 'col col-md-3 control-label'
+        ),
+        'wrapInput' => 'col col-md-9',
+        'class' => 'form-control'
+    ),
+    'class' => 'form-horizontal'
+)); ?> 
+
+
+				
+					<?php echo $this->Form->input('username', array('placeholder' => 'Username'));?>
+					<?php echo $this->Form->input('password', array('placeholder' => 'Password'));?>
+					<?php echo $this->Form->input('group_id', array('placeholder' => 'Role','label'=>'Role'));?>
+					<?php echo $this->Form->input('fullname', array('placeholder' => 'Full name'));?>
+					<?php echo $this->Form->input('email', array('placeholder' => 'Email address'));?>
+					<?php echo $this->Form->input('contact', array('placeholder' => 'Contact number'));?>
 
 			<?php echo $this->Form->end() ?>
-    </div> <!-- end col md 9 -->
+           
+            <!-- /.row -->
+        </div>
+
+        </div>
+        </div>
 </div>
-<!-- /.row -->
-</div>
-<!-- /#page-wrapper -->
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+
+
+
+
+
+
+
+

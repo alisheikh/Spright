@@ -19,40 +19,22 @@
 					<?php echo $this->Form->input('id', array('class' => 'form-control', 'placeholder' => 'Id'));?>
 				</div>
 				<div class="form-group">
-					<?php echo $this->Form->input('code', array('class' => 'form-control', 'placeholder' => 'Code', 'label' => 'Job template name'));?>
+					<?php echo $this->Form->input('code', array('class' => 'form-control', 'placeholder' => 'Code', 'label' => 'Name'));?>
 				</div>
 				 <h3>Tasks</h3>
 
-				 <? debug($tasks); ?>
 
-
-                                <table class="table table-hover">
-                                    <thead>
-                                    
-                                        <tr>
-                                            <th>Task Name</th>
-                                            <th>Skill</th>
-              
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    <?php foreach ($this->request->data['Jobtasks'] as $jobtask): ?>
-
-                                        <tr>
-                                            <td><?php echo h($jobtask['code']); ?>&nbsp;</td>
-                                            <td><?php echo h($jobtask['skill_id']); ?>&nbsp;</td>		
-                                        </tr>
-                                        <?php endforeach; ?>
-
-                                    </tbody>
-                                </table>
-                           
-
-				<div class="form-group">
-					<?php echo $this->Form->submit(__('Save'), array('class' => 'btn btn-default')); ?>
-				</div>
+          <table id="job-template-tasks" class="jobs-table table table-striped table-bordered">
+                <thead>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Skill</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
 
 			<?php echo $this->Form->end() ?>
             

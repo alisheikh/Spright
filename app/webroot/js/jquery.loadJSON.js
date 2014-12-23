@@ -25,7 +25,6 @@
             if (type == null)
                 return;
             type = type.toLowerCase();
-            console.log(type);
             switch (type) {
 
                 case 'radio':
@@ -52,6 +51,12 @@
                     
                 case 'select-one':
                 $(element).val(value); 
+
+                case 'number':
+                    $(element).val(value); 
+                    $(element).attr("value", value);
+                    break;
+
                 case 'text':
                 case 'hidden':
                 $(element).val(value); 
@@ -88,6 +93,7 @@
                     break;
 
                 case 'textarea':
+                $(element).val(value); 
                 case 'submit':
                 case 'button':
                 default:

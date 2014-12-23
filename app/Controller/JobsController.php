@@ -26,7 +26,7 @@ class JobsController extends AppController {
 
 	public function schedule() {
 
-		require_once (APP . 'Vendor' . DS . 'Recurr' . DS . 'autoload.php');
+		require_once APP . 'Vendor' . DS . 'Recurr' . DS . 'autoload.php';
 
 		$timezone = 'Australia/Perth';
 
@@ -50,7 +50,7 @@ class JobsController extends AppController {
 			$runtime = $this->data['Job']['runtime'];
 
 			$startDate = new \DateTime($startD, new \DateTimeZone($timezone));
-			$endDate = new \DateTime($endD, new \DateTimeZone($timezone));// Optional
+			$endDate = new \DateTime($endD, new \DateTimeZone($timezone)); // Optional
 
 			$test = null;
 
@@ -94,6 +94,8 @@ class JobsController extends AppController {
 	}
 
 	public function index() {
+
+		$this->set('pageTitle', 'Work Orders');
 
 		$this->Job->recursive = 0;
 
@@ -142,7 +144,7 @@ class JobsController extends AppController {
 	public function getJobs() {
 		$this->paginate = array(
 			'fields' => array('Job.id', 'Job.fullname', 'Building.code', 'Room.code', 'Statustype.code'),
-			'contain' => array('Room', 'Building', 'Statustype')
+			'contain' => array('Room', 'Building', 'Statustype'),
 		);
 		$this->DataTable->mDataProp = true;
 		$this->set('response', $this->DataTable->getResponse());
@@ -151,25 +153,10 @@ class JobsController extends AppController {
 	}
 
 	public function dashboard() {
+
+		$this->set('pageTitle', 'Dashboard');
 		$this->Job->recursive = 0;
 		$this->set('jobs', $this->Paginator->paginate());
-	}
-
-	public function workplanner() {
-
-		$jobs = $this->Job->find('all', array('conditions' => array('deleted' => 0), 'fields' => array('id'),
-			'order' => array('id DESC')
-		));
-
-		//Load Users into controller as we need to know what jobs we can assign people
-		$this->loadModel('User');
-
-		$this->User->contain('Task');
-		$users = $this->User->find('all', array('conditions' => array('active' => 1)
-		));
-
-		$this->set('jobs', $jobs);
-		$this->set('users', $users);
 	}
 
 	public function complete() {
@@ -198,15 +185,113 @@ class JobsController extends AppController {
 		if (!$this->Job->exists($id)) {
 			throw new NotFoundException(__('Invalid job'));
 		}
-		$options = array('conditions' => array('Job.' . $this->Job->primaryKey => $id));
-		$this->set('job', $this->Job->find('first', $options));
+
+		$this->set('pageTitle', 'Work Order');
+		$this->set('titleSmall', '#' . $id);
+
+		$this->recursive = 2;
+
+		if ($this->request->is(array('post', 'put'))) {
+
+			if ($this->request->data['Job']['completiomcomments']):
+				$this->request->data['Job']['statustype_id'] = 3;
+			endif;
+
+			if ($this->Job->save($this->request->data)) {
+
+				//if ($this->request->data['Job']['statustype_id'] === 3):
+				$this->Session->setFlash('Job completed!', 'notification');
+				//endif;
+
+				return $this->redirect(array('action' => 'view/' . $id));
+			} else {
+				$this->Session->setFlash(__('The job could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
+			}
+		} else {
+
+			// $options['joins'] = array(
+			// 	array('table' => 'tasks',
+			// 		'alias' => 't',
+			// 		'type' => 'inner',
+			// 		'conditions' => array(
+			// 			'Job.id = t.job_id',
+			// 		),
+			// 	),
+			// 	array('table' => 'statustypes',
+			// 		'alias' => 's',
+			// 		'type' => 'inner',
+			// 		'conditions' => array(
+			// 			't.statustype_id = s.id',
+			// 		),
+			// 	),
+			// 	array('table' => 'skills',
+			// 		'alias' => 'sk',
+			// 		'type' => 'inner',
+			// 		'conditions' => array(
+			// 			't.skill_id = sk.id',
+			// 		),
+			// 	),
+			// );
+
+			// $options['conditions'] = array(
+			// 	'Job.id' => $id,
+			// );
+
+			// $test = $this->Job->find('first', $options);
+
+			// $this->set('test', $test);
+
+			$options = array('conditions' => array('Job.' . $this->Job->primaryKey => $id));
+			$this->request->data = $this->Job->find('first', $options);
+
+		}
+		// $users = $this->Job->User->find('list');
+		// $jobtypes = $this->Job->Jobtype->find('list');
+
+		// $sites = $this->Job->Site->find('list');
+		// $buildings = $this->Job->Building->find('list');
+		// $floors = $this->Job->Floor->find('list');
+		// $rooms = $this->Job->Room->find('list');
+		// $statustypes = $this->Job->Statustype->find('list');
+		// $faulttypes = $this->Job->Faulttype->find('list');
+
+		// $this->set(compact('users', 'jobtypes', 'rooms', 'statustypes', 'buildings', 'faulttypes', 'floors', 'sites'));
 	}
 
 	public function getJob($id = null) {
 		if (!$this->Job->exists($id)) {
 			throw new NotFoundException(__('Invalid job'));
 		}
+
 		$options = array('conditions' => array('Job.' . $this->Job->primaryKey => $id));
+		$job = $this->Job->find('first', $options);
+
+		$json = array
+		(
+			'job.id' => $job['Job']['id'],
+			'job.description' => $job['Job']['description'],
+
+		);
+
+		$this->set('json', $json);
+
+		$this->set('_serialize', 'json');
+	}
+
+	public function getTask($id = null) {
+
+		$options['joins'] = array(
+			array('table' => 'tasks',
+				'alias' => 't',
+				'type' => 'inner',
+				'conditions' => array(
+					't.job_id = Job.id',
+				),
+			),
+		);
+
+		$options['conditions'] = array('t.id' => $id);
+
 		$this->set('job', $this->Job->find('first', $options));
 
 		$this->set('_serialize', 'job');
@@ -218,23 +303,28 @@ class JobsController extends AppController {
  * @return void
  */
 	public function add() {
+
+		$this->set('pageTitle', 'Raise Work Order');
+
+		$user_id = $this->Auth->user('id');
+
 		if ($this->request->is('post')) {
 
-			//Lets figure out what job template to use, I couldn't think of an elegant way to do this.
+			//Lets figure out what job template to use. Needs to be done again for improve performance.
 
-			$qs1 = $this->request->data['Job']['qs1ID'];
-			$qs2 = $this->request->data['Job']['qs2ID'];
-			$qs3 = $this->request->data['Job']['qs3ID'];
-			$qs4 = $this->request->data['Job']['qs4ID'];
-			$qs5 = $this->request->data['Job']['qs5ID'];
+			$qs1 = $this->request->data['Job']['qs1'];
+			$qs2 = $this->request->data['Job']['qs2'];
+			if (!empty($this->request->data['Job']['qs3'])):$qs3 = $this->request->data['Job']['qs3'];endif;
+			if (!empty($this->request->data['Job']['qs4'])):$$qs4 = $this->request->data['Job']['qs4'];endif;
+			if (!empty($this->request->data['Job']['qs5'])):$$qs5 = $this->request->data['Job']['qs5'];endif;
 
-			if ($qs5):
+			if (!empty($qs5)):
 				$templateID = $qs5;
-			elseif ($qs4):
+			elseif (!empty($qs4)):
 				$templateID = $qs4;
-			elseif ($qs3):
+			elseif (!empty($qs3)):
 				$templateID = $qs3;
-			elseif ($qs2):
+			elseif (!empty($qs2)):
 				$templateID = $qs2;
 			else:
 				$templateID = $qs1;
@@ -242,7 +332,8 @@ class JobsController extends AppController {
 
 			$this->request->data['Job']['statustype_id'] = 1;
 			$this->request->data['Job']['jobtype_id'] = 1;
-			$this->request->data['Job']['user_id'] = $this->Auth->user('id');
+			$this->request->data['Job']['user_id'] = $user_id;
+
 			$this->Job->create();
 
 			if ($this->Job->save($this->request->data)) {
@@ -252,7 +343,7 @@ class JobsController extends AppController {
 
 				//What job template does this question row relate to?
 				$this->loadModel('Question');
-				$question = $this->Question->find('first', array('conditions' => array('Question.id' => $this->request->data['Job']['qs1ID'])));
+				$question = $this->Question->find('first', array('conditions' => array('Question.id' => $this->request->data['Job']['qs1'])));
 
 				//Job template ID from find above
 
@@ -271,7 +362,7 @@ class JobsController extends AppController {
 							'skill_id' => 1,
 							'scheduled' => 0,
 							'statustype_id' => 1,
-							'created' => date("Y-m-d H:i:s")
+							'created' => date("Y-m-d H:i:s"),
 						));
 					else:
 
@@ -288,7 +379,7 @@ class JobsController extends AppController {
 								'skill_id' => $jobTask['Jobtask']['skill_id'],
 								'scheduled' => 0,
 								'statustype_id' => 1,
-								'created' => date("Y-m-d H:i:s")
+								'created' => date("Y-m-d H:i:s"),
 							));
 						}
 
@@ -302,15 +393,16 @@ class JobsController extends AppController {
 						'skill_id' => 1,
 						'scheduled' => 0,
 						'statustype_id' => 1,
-						'created' => date("Y-m-d H:i:s")
+						'created' => date("Y-m-d H:i:s"),
 					));
 
 				endif;
 
 				$this->Session->setFlash(__('Your job has been raised'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'edit', $this->Job->id));
+				return $this->redirect(array("controller" => "jobs", "action" => "dashboard"));
 			} else {
-				$this->Session->setFlash(__('The job could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
+				debug($this->Job->validationErrors);
+				throw new NotFoundException(__('An error occur raising a job, please check log files.'));
 			}
 		}
 		$users = $this->Job->User->find('list');
@@ -323,6 +415,90 @@ class JobsController extends AppController {
 		$this->set(compact('users', 'jobtypes', 'rooms', 'statustypes'));
 	}
 
+	public function dispatcher() {
+
+		//$this->autoRender = false;
+
+		//Find all Tasks which have yet to be scheduled.
+		$Taskoptions = array('conditions' => array('Task.scheduled' => 0), 'fields' => array('Task.skill_id', 'Task.id'), 'rescursive' => '-1');
+		$tasks = $this->Job->Task->find('all', $Taskoptions);
+
+		echo "<h3>Tasks requiring dispatch! " . count($tasks) . "</h3>";
+		//debug($tasks);
+
+		foreach ($tasks as $task):
+			//echo "Job.id: " . $task['Job']['id'] . "</br>";
+			//echo "Task.id: " . $task['Task']['id'] . "</br>";
+			//echo "Task.skill_id: " . $task['Task']['skill_id'] . "</br>";
+
+			$this->loadModel('User');
+
+			$options['joins'] = array(
+				array('table' => 'skills_users',
+					'alias' => 'su',
+					'type' => 'inner',
+					'conditions' => array(
+						'User.id = su.user_id',
+					),
+				),
+				array('table' => 'skills',
+					'alias' => 's',
+					'type' => 'inner',
+					'conditions' => array(
+						'su.skill_id = s.id',
+					),
+				),
+			);
+
+			$options['conditions'] = array(
+				's.id' => 2,
+			);
+
+			// $options['fields'] = array(
+			// 	's.code',
+			// );
+
+			// $options['contain'] = array(
+			// 	'Skill',
+			// );
+
+			$user = $this->User->find('all', $options);
+
+			//echo "<h5>Skilled Users</h5>";
+			//debug($user);
+
+			$this->set('data', $user);
+			//echo "<hr>";
+		endforeach;
+
+	}
+
+	public function completeJob() {
+
+		$this->autoRender = false;
+
+		$id = $this->request->query['id'];
+		$completiondate = $this->request->query['completiondate'];
+		$completioncomments = $this->request->query['completioncomments'];
+
+		if (!$this->Job->exists($id)) {
+			throw new NotFoundException(__('Invalid job, can not complete job'));
+		}
+
+		if ($this->request->is('get')) {
+			$this->Session->setFlash('Something custom!', 'notification');
+
+			$this->Job->save(array(
+				'id' => $id,
+				'completiondate' => $completiondate,
+				'completioncomments' => $completioncomments,
+				'statustype_id' => 3,
+			));
+
+		}
+
+	}
+
 /**
  * edit method
  *
@@ -331,13 +507,19 @@ class JobsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+
+		$this->recursive = 2;
 		if (!$this->Job->exists($id)) {
 			throw new NotFoundException(__('Invalid job'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Job->save($this->request->data)) {
-				$this->Session->setFlash(__('The job has been saved.'), 'default', array('class' => 'alert alert-success'));
-				//return $this->redirect(array('action' => 'index'));
+
+				//if ($this->request->data['Job']['statustype_id'] === 3):
+				$this->Session->setFlash('Job completed!', 'notification');
+				//endif;
+
+				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The job could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
@@ -346,14 +528,18 @@ class JobsController extends AppController {
 			$options = array('conditions' => array('Job.' . $this->Job->primaryKey => $id));
 			$this->request->data = $this->Job->find('first', $options);
 
-			//debug($this->request->data);
 		}
 		$users = $this->Job->User->find('list');
 		$jobtypes = $this->Job->Jobtype->find('list');
-		$rooms = $this->Job->Room->find('list');
+
+		$sites = $this->Job->Site->find('list');
 		$buildings = $this->Job->Building->find('list');
+		$floors = $this->Job->Floor->find('list');
+		$rooms = $this->Job->Room->find('list');
 		$statustypes = $this->Job->Statustype->find('list');
-		$this->set(compact('users', 'jobtypes', 'rooms', 'statustypes', 'buildings'));
+		$faulttypes = $this->Job->Faulttype->find('list');
+
+		$this->set(compact('users', 'jobtypes', 'rooms', 'statustypes', 'buildings', 'faulttypes', 'floors', 'sites'));
 	}
 
 /**

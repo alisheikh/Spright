@@ -13,7 +13,9 @@ class JobtasksController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
+
+
 
 /**
  * index method
@@ -23,6 +25,26 @@ class JobtasksController extends AppController {
 	public function index() {
 		$this->Jobtask->recursive = 0;
 		$this->set('jobtasks', $this->Paginator->paginate());
+	}
+
+	public function getJobTemplateTasks() {
+
+		// $this->paginate = array(
+		// 	'fields' => array('Skill.code', 'DT_RowId', 'Jobtask.code', 'Jobtask.description', 'Jobtask.created'),
+		// 	'contain' => array('Skill'),
+		// 	'conditions' => array('Jobtask.id' => 3));
+
+		$this->paginate = array(
+			// 'fields' => array('Jobtask.code'),
+			'link' => array(
+				'Skill',
+			),
+		);
+
+		$this->DataTable->mDataProp = true;
+		$this->set('response', $this->DataTable->getResponse());
+		$this->set('_serialize', 'response');
+
 	}
 
 /**
@@ -45,15 +67,15 @@ class JobtasksController extends AppController {
  *
  * @return void
  */
-	public function add($id=1) {
+	public function add($id = 1) {
 		if ($this->request->is('post')) {
 
-$this->request->data['Jobtask']['jobtemplate_id'] = $id;
+			$this->request->data['Jobtask']['jobtemplate_id'] = $id;
 
 			$this->Jobtask->create();
 			if ($this->Jobtask->save($this->request->data)) {
 				$this->Session->setFlash(__('The jobtask has been saved.'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('controller'=>'jobtemplates','action' => 'view/'.$id));
+				return $this->redirect(array('controller' => 'jobtemplates', 'action' => 'view/' . $id));
 			} else {
 				$this->Session->setFlash(__('The jobtask could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}

@@ -8,6 +8,14 @@ App::uses('AppModel', 'Model');
  */
 class Jobtask extends AppModel {
 
+	public $displayField = 'code';
+
+	public $virtualFields = array(
+		'DT_RowId' => 'Jobtask.id',
+	);
+
+	public $actsAs = array('Containable', 'Linkable');
+
 /**
  * Validation rules
  *
@@ -59,14 +67,14 @@ class Jobtask extends AppModel {
 			'foreignKey' => 'jobtemplate_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
 		),
 		'Skill' => array(
 			'className' => 'Skill',
 			'foreignKey' => 'skill_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
-		)
+			'order' => '',
+		),
 	);
 }

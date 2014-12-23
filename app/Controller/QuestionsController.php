@@ -107,11 +107,6 @@ class QuestionsController extends AppController {
  * @return void
  */
 	function index() {
-		//$Questionlist = $this->Question->generateTreeList(null, null, null, " - ");
-
-		//.$Questionlist = $this->Question->find('all');
-
-		//$this->loadModel('Jobtemplate');
 		$jobTemplates = $this->Question->Jobtemplate->find('list');
 
 		$this->set(compact('jobTemplates'));
@@ -134,36 +129,36 @@ class QuestionsController extends AppController {
 				'order' => array('lft ASC')
 			));
 
-			//$childCount = $this->Question->childCount($_GET['key'], true);
-
-
-
 		}
 
-		function mapThreaded($source, &$target) {
-			foreach ($source as $item) {
+			$target = array();
+			foreach ($questions as $item) {
+
+				$count = $this->Question->childCount($item['Question']['id'], true);
+
+				if ($count<1){
+					$lazy = false;
+				}else
+				$lazy = true;
+
+			//	echo $count;
+
 				$node = array
 				(
 					'key' => $item['Question']['id'],
 					'title' => $item['Question']['code'],
-					'lazy' => $item['Question']['lazy'],
+					'lazy' => $lazy,
 					'folder' => $item['Question']['folder'],
+					'count' => $count, //Check if this node has any kids, we need this because only nodes with no kids can be configured with a job template
 					'children' => array()
 				);
 
-				//	if (count($item['children'])) {
-				//		mapThreaded($item['children'], $node['children']);
-				//	}
-
 				$target[] = $node;
 			}
-		}
 
-		$tree = array();
 
-		mapThreaded($questions, $tree);
 
-		$results = $this->set('json', $tree);
+		$results = $this->set('json', $target);
 
 		$this->set('_serialize', 'json');
 
@@ -233,7 +228,7 @@ class QuestionsController extends AppController {
 
 	function delete($id = null) {
 		$this->autoRender = false;
-		
+
 		if ($id == null) {
 			die("No ID received");
 		}
@@ -245,6 +240,8 @@ class QuestionsController extends AppController {
 	}
 
 	function deleteCode() {
+$this->autoRender = false;
+		
 		$id = $this->request->query['key'];
 		if ($id == null) {
 			die("Invalid node ID provided");

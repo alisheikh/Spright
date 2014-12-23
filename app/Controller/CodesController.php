@@ -8,6 +8,30 @@ App::uses('AppController', 'Controller');
  */
 class CodesController extends AppController {
 
+	public function getParents() {
+
+		$locations = $path = $this->Code->getPath(18);
+
+		function mapThreaded($source, &$target) {
+
+			foreach ($source as $item) {
+				$node = array
+				(
+					'key' => $item['Code']['id'],
+					'title' => $item['Code']['code'],
+
+				);
+
+				$target[] = $node;
+			}
+		}
+		$tree = array();
+		mapThreaded($locations, $tree);
+		$results = $this->set('json', $tree);
+		$this->set('_serialize', 'json');
+
+	}
+
 /**
  * Components
  *
@@ -21,8 +45,8 @@ class CodesController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Code->recursive = 0;
-		$this->set('codes', $this->Paginator->paginate());
+		//$this->Code->recursive = 0;
+		//$this->set('codes', $this->Paginator->paginate());
 	}
 
 	public function location() {
@@ -57,43 +81,82 @@ class CodesController extends AppController {
 	function buildLocations() {
 
 		$this->Code->recursive = -1;
-		if (isset($_GET['key'])):
+
+		if ($_GET['key'] != 0):
 
 			$locations = $this->Code->find('all', array('conditions' => array('Code.parent_id' => $_GET['key']),
 				'fields' => array('code', 'id', 'parent_id', 'lazy'),
-				'order' => array('lft ASC')
+				'order' => array('lft ASC'),
 			));
+		else:
+
+			$locations = $this->Code->find('threaded', array(
+				'fields' => array('code', 'id', 'parent_id', 'lazy'),
+				'order' => array('lft ASC'),
+			));
+		endif;
+
+		$target = array();
+		foreach ($locations as $item) {
+
+			$count = $this->Code->childCount($item['Code']['id'], true);
+
+			if ($count < 1) {
+				$lazy = false;
+			} else {
+				$lazy = true;
+			}
+
+			//	echo $count;
+
+			$node = array
+			(
+				'key' => $item['Code']['id'],
+				'title' => $item['Code']['code'],
+				'lazy' => $lazy,
+				'count' => $count,
+				'children' => array(),
+			);
+
+			$target[] = $node;
+		}
+
+		$results = $this->set('json', $target);
+		$this->set('_serialize', 'json');
+
+	}
+
+	function populateLocations() {
+
+		$this->Code->recursive = -1;
+
+		if (isset($this->request->query['key'])):
+			$key = $this->request->query['key'];
+
+			$locations = $this->Code->find('all', array('conditions' => array('Code.parent_id' => $key),
+				'fields' => array('code', 'id', 'parent_id', 'lazy'),
+				'order' => array('lft ASC')));
 		else:
 
 			$locations = $this->Code->find('all', array('conditions' => array('Code.parent_id' => 1),
 				'fields' => array('code', 'id', 'parent_id', 'lazy'),
-				'order' => array('lft ASC')
-			));
+				'order' => array('lft ASC')));
 		endif;
 
-		function mapThreaded($source, &$target) {
-			foreach ($source as $item) {
-				$node = array
-				(
-					'key' => $item['Code']['id'],
-					'title' => $item['Code']['code'],
-					'lazy' => $item['Code']['lazy'],
+		$target = array();
 
-				);
+		foreach ($locations as $item) {
+			$node = array
+			(
+				'key' => $item['Code']['id'],
+				'title' => $item['Code']['code'],
 
-				//	if (count($item['children'])) {
-				//		mapThreaded($item['children'], $node['children']);
-				//	}
+			);
 
-				$target[] = $node;
-			}
+			$target[] = $node;
 		}
 
-		$tree = array();
-
-		mapThreaded($locations, $tree);
-
-		$results = $this->set('json', $tree);
+		$results = $this->set('json', $target);
 
 		$this->set('_serialize', 'json');
 
@@ -106,16 +169,62 @@ class CodesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
 
-		if ($id != null):
-			if (!$this->Code->exists($id)) {
-				throw new NotFoundException(__('Invalid code'));
+	public function updateCode() {
+		$this->autoRender = false;
+		if ($this->request->is('post')) {
+
+			$this->Code->save($this->request->data);
+		}
+	}
+
+	function view($id = null) {
+
+		if ($id == null) {
+			die("No ID received");
+		}
+
+		//$id = $this->request->query['id'];
+
+		$idExist = $this->Code->findById($id);
+		if (!$idExist) {
+			throw new NotFoundException(__('Invalid ID'));
+		}
+
+		$questions = $this->Code->find('all', array('conditions' => array('Code.id' => $id)));
+
+		function mapThreaded($source, &$target) {
+			foreach ($source as $item) {
+				$node = array
+				(
+					'data[Code][id]' => $item['Code']['id'],
+					'data[Code][code]' => $item['Code']['code'],
+					'data[Code][description]' => $item['Code']['description'],
+					'data[Code][address]' => $item['Code']['address'],
+					'data[Code][sqm]' => $item['Code']['sqm'],
+					'data[Code][bookable]' => $item['Code']['bookable'],
+					'data[Code][capacity]' => $item['Code']['capacity'],
+					'data[Code][serial]' => $item['Code']['serial'],
+					'data[Code][status]' => $item['Code']['status'],
+					'data[Code][manufacturer]' => $item['Code']['manufacturer'],
+					'data[Code][make]' => $item['Code']['make'],
+					'data[Code][model]' => $item['Code']['model'],
+					'data[Code][supplier]' => $item['Code']['supplier'],
+					'data[Code][cost]' => $item['Code']['cost'],
+				);
+
+				$target[] = $node;
 			}
-		endif;
+		}
 
-		$options = array('conditions' => array('Code.' . $this->Code->primaryKey => $id));
-		$this->set('code', $this->Code->find('first', $options));
+		$tree = array();
+
+		mapThreaded($questions, $tree);
+
+		$results = $this->set('json', $tree);
+
+		$this->set('_serialize', 'json');
+
 	}
 
 /**
@@ -129,12 +238,13 @@ class CodesController extends AppController {
 		$this->autoRender = false;
 
 		//GET Variables
-		$locationCode = $this->request->query['location'];
+		$locationCode = $this->request->query['code'];
 		$parent_id = $this->request->query['parent_id'];
+		$locationType = $this->request->query['locationType'];
 
 		$this->request->data['Code']['code'] = $locationCode;
 		$this->request->data['Code']['parent_id'] = $parent_id;
-		$this->request->data['Code']['codetype_id'] = 0;
+		$this->request->data['Code']['codetype_id'] = $locationType;
 
 		//Lets save it now but only if this request is via a GET request
 		if ($this->request->is('get')) {
@@ -212,9 +322,9 @@ class CodesController extends AppController {
 		$this->request->onlyAllow('get');
 		if ($this->Code->delete()) {
 		} else {
-	
+
 		}
-		
+
 	}
 
 	/**
@@ -223,6 +333,8 @@ class CodesController extends AppController {
 	 */
 
 	public function assetindex() {
+
+		$this->set('pageTitle', 'Assets');
 		$this->Code->recursive = 0;
 
 		$this->Paginator->settings = array(
@@ -231,6 +343,8 @@ class CodesController extends AppController {
 	}
 
 	public function assetcreate() {
+
+		$this->set('pageTitle', 'Create Asset');
 
 		if ($this->request->is('post')) {
 
@@ -266,8 +380,8 @@ class CodesController extends AppController {
 
 			$this->Code->create();
 			if ($this->Code->save($this->request->data)) {
-				$this->Session->setFlash(__('Success! Asset created'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'assetindex'));
+				//$this->Session->setFlash(__('Success! Asset created'), 'default', array('class' => 'alert alert-success'));
+				return $this->redirect('/assets//');
 			} else {
 				$this->Session->setFlash(__('The Asset could not be created. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
@@ -299,25 +413,25 @@ class CodesController extends AppController {
 			//Retrive all Site Codes
 			$sites = $this->Code->find('list', array(
 				'fields' => array('id', 'code'),
-				'conditions' => array('Code.codetype_id' => 1)
+				'conditions' => array('Code.codetype_id' => 1),
 			));
 
 			//Retrive all Building Codes
 			$buildings = $this->Code->find('list', array(
 				'fields' => array('id', 'code'),
-				'conditions' => array('parent_id' => $asset['Site']['id'])
+				'conditions' => array('parent_id' => $asset['Site']['id']),
 			));
 
 			//Retrive all Floor Codes
 			$floors = $this->Code->find('list', array(
 				'fields' => array('id', 'code'),
-				'conditions' => array('parent_id' => $asset['Building']['id'])
+				'conditions' => array('parent_id' => $asset['Building']['id']),
 			));
 
 			//Retrive all Room Codes
 			$rooms = $this->Code->find('list', array(
 				'fields' => array('id', 'code'),
-				'conditions' => array('parent_id' => $asset['Floor']['id'])
+				'conditions' => array('parent_id' => $asset['Floor']['id']),
 			));
 
 			//Set some variables so the view can populate the location select elements
@@ -337,9 +451,24 @@ class CodesController extends AppController {
 		$json = $this->Code->find('all', array(
 			'conditions' => array(
 				'Code.code LIKE' => '%' . $q . '%'),
-			'fields' => array('Code.code')
+			'fields' => array('Code.code'),
 		));
 		$json = Set::extract('/Code/.', $json);
+
+		$this->set('json', $json);
+
+		$this->set('_serialize', 'json');
+
+	}
+
+	public function getLocations() {
+
+		//$q = $_GET['q'];
+
+		$json = $this->Code->find('threaded', array(
+			'fields' => array('Site.code', 'Building.code', 'Floor.code', 'Room.code'),
+		));
+		//$json = Set::extract('/Code/.', $json);
 
 		$this->set('json', $json);
 
@@ -390,25 +519,32 @@ class CodesController extends AppController {
 
 	function validAsset() {
 
-		$value = $this->request->data['Code']['code'];
+		//	$this->autoRender = false;
 
-		$options = array('conditions' => array('Code.code' => $value));
-		$validCode = $this->Code->find('first', $options);
+		$newCode = $this->request->query['data']['Code']['code'];
+		$orignalCode = $this->request->query['orginalCode'];
+		$asset_id = $this->request->query['asset_id'];
 
-		if ($validCode) {
+		if ($newCode === $orignalCode) {
 
-			if ($validCode['Code']['code'] === $value):
-				$isAvailable = true;
-			else:
-				$isAvailable = false;
-			endif;
-		} else {
 			$isAvailable = true;
+
+		} else {
+
+			$options = array('conditions' => array('Code.code' => $newCode));
+			$validCode = $this->Code->find('first', $options);
+
+			if ($validCode) {
+
+				$isAvailable = false;
+			} else {
+
+				$isAvailable = true;
+			}
+
 		}
 
-		$results = $this->set('json', array(
-			'valid' => $isAvailable,
-		));
+		$results = $this->set('json', $isAvailable);
 
 		$this->set('_serialize', 'json');
 

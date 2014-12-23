@@ -11,6 +11,10 @@ class Jobtemplate extends AppModel {
 
 	public $displayField = 'code';
 
+	public $virtualFields = array(
+		'DT_RowId' => 'Jobtemplate.id',
+	);
+
 /**
  * Validation rules
  *
@@ -48,7 +52,7 @@ class Jobtemplate extends AppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'counterQuery' => '',
 		),
 		'Jobtask' => array(
 			'className' => 'Jobtask',
@@ -61,30 +65,8 @@ class Jobtemplate extends AppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
-
-
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
-	public $hasAndBelongsToMany = array(
-		'Job' => array(
-			'className' => 'Job',
-			'joinTable' => 'jobs_jobtemplates',
-			'foreignKey' => 'jobtemplate_id',
-			'associationForeignKey' => 'job_id',
-			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-		)
+			'counterQuery' => '',
+		),
 	);
 
 }

@@ -1,17 +1,24 @@
- <div id="page-wrapper" class='assetIndex'>
-    <div class="panel-heading">
-        <h1>Users</h1>
+              <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+     
+     <?php echo $this->element('contentHeader', array(
+         'title'=> $pageTitle,
+         'saveBtn'=> false,
+         'addBtn'=> true,
+         'addBtnTarget'=> '/users/add/' //Provice reletive URL
+     )); ?>
+  
+
+                <!-- Main content -->
+                <section class="content">
+
+            <div class="row">
+
+                                    <div class="col-xs-12">
+                            <div class="box">
 
 
-
-    </div>
-    <!-- /.row -->
-
-            <div class="btn-toolbar">
-            <a href="/users/add" class="btn btn-success btn-sm">New User</a>
-        </div>
-    <div class="row">
-        <div class="col-md-9">
+<div class="box-body table-responsive">
             <table cellpadding="0" cellspacing="0" class="table table-striped">
                 <thead>
                     <tr>
@@ -62,41 +69,19 @@
         </ul>
         <?php } ?>
 
-    </div> <!-- end col md 9 -->
-</div>
-<!-- /.row -->
-</div>
-<!-- /#page-wrapper -->
 
-<!-- Modal -->
-<style>
+   </div>
+   </div>
+            </div>
+            <!-- /.row -->
+        </div>
 
-    .modal-dialog {
-        float:right;
-        width: 60%;
-        height: 100%;
-        padding: 0;
-    }
-
-    .modal-content {
-      height: 100%;
-      border-radius: 0;
-  }
-</style>
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
 
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
 
-      <div class="modal-body">
-        ...
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-    </div>
-</div>
-</div>
-</div>
+
+
+

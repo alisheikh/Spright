@@ -73,4 +73,14 @@ class Schedule extends AppModel {
 			),
 		),
 	);
+
+	public $belongsTo = array(
+		'Jobtemplate' => array(
+			'className' => 'Jobtemplate',
+			'foreignKey' => 'jobtemplate_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+		)
+	);
 }

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "codaxis/cakephp-bootstrap3-helpers": "1.1",
+        "wyrihaximus/ratchet": "0.3.*"
+    }
+}

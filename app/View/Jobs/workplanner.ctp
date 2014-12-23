@@ -1,44 +1,19 @@
-
-<style>
-   
-.container{
-overflow-x: scroll;
-
-}
-
-    .image {
-        background-color:#ffcb05;
-    }
-
-        .valid {
-       background-color:#dff0d8;
-
-        cursor:move;
-    }
-
-        .image2 {
-        background-color:#dff0d8;
-        width:200px !important;
-        cursor:move;
-    }
-    .step {
-        background-color:#e7e7e7e7;
-
-    
-    }
-
-
-    .drag { 
-    border-radius:2px;  
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+     
+     <?php echo $this->element('contentHeader', array(
+         'title'=> $pageTitle,
+         'saveBtn'=> false,
+         'addBtn'=> true,
+         'saveBtnTarget'=> '/jobs/add/' //Provice reletive URL
+     )); ?>
   
-    color:#777777; 
-    font-size: 10px
-}
-.rf-ind-drag.default {
 
-    background-color: red;  
-}
-    </style>
+                <!-- Main content -->
+                <section class="content">
+
+            <div class="row">
+
 <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
@@ -125,13 +100,18 @@ switch ($status) {
       </div>
 
 
-
-            
-
-
-<div id="result">
-</div>
-
         </div>
         <!-- /#page-wrapper -->
+
+        </div>
+
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+
+
+
+
+
+
+
 

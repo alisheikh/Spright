@@ -11,7 +11,6 @@ class Task extends AppModel {
 
 	var $actsAs = array('Tools.Linkable');
 
-
 /**
  * Validation rules
  *
@@ -71,6 +70,13 @@ class Task extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
-		)
+		),
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+		),
 	);
 }

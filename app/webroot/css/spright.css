@@ -1,4 +1,53 @@
 
+/**
+*
+* Global CSS
+*
+**/
+
+.sticky.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index:1200;
+}
+
+.sticky{
+display: flex;
+justify-content:  space-between}
+
+/**
+*
+* Work Planner
+*
+**/
+
+
+
+/* ICONS */
+
+.wp_scheduled{
+
+    color: #F0AD4E;
+
+}
+
+
+
+.bootboxLarge > .modal-dialog {
+    width:80%  !important;
+    float:right;
+}
+
+.scheduler tr:hover{
+    
+    cursor:pointer;
+}
+
+#resources .scheduledTask:hover{
+    background-color:#ccc;
+    cursor:pointer;
+}
 
 /* Ajax Spinner Large */
 #spinner
@@ -14,7 +63,7 @@
     margin-top: -100px;
     z-index:2;
     overflow: auto;
-}   
+}    
 
 /* Empty location dataset */
 

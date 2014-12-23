@@ -13,75 +13,7 @@ App::uses('AppModel', 'Model');
  */
 class Job extends AppModel {
 
-	public $actsAs = array('Containable');
-
-/**
- * Validation rules
- *
- * @var array
- */
-	public $validate = array(
-		'code' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'description' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'user_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'jobtype_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'room_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'statustype_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	 public $actsAs = array('Containable', 'Linkable.Linkable');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -108,6 +40,13 @@ class Job extends AppModel {
 		'Room' => array(
 			'className' => 'Room',
 			'foreignKey' => 'room_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+		),
+		'Faulttype' => array(
+			'className' => 'Faulttype',
+			'foreignKey' => 'faulttype_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -187,7 +126,7 @@ class Job extends AppModel {
 			'conditions' => '',
 			'fields' => 'code',
 			'order' => '',
-		)
+		),
 	);
 
 /**
@@ -221,7 +160,7 @@ class Job extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => '',
-		)
+		),
 	);
 
 }

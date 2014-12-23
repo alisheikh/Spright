@@ -15,6 +15,20 @@ class UsersController extends AppController {
  */
 	public $components = array('Paginator', 'RequestHandler');
 
+	public function initDB() {
+
+		$this->autoRender = false;
+		$group = $this->User->Group;
+
+		// Allow admins to everything
+		$group->id = 1;
+		$this->Acl->allow($group, 'controllers');
+
+		// we add an exit to avoid an ugly "missing views" error message
+		echo "all done";
+		exit;
+	}
+
 	public function getNames() {
 
 		$q = $_GET['q'];
@@ -22,7 +36,7 @@ class UsersController extends AppController {
 		$json = $this->User->find('all', array(
 			'conditions' => array(
 				'User.fullname LIKE' => '%' . $q . '%'),
-			'fields' => array('User.fullname', 'User.email', 'User.contact')
+			'fields' => array('User.fullname', 'User.email', 'User.contact'),
 		));
 		$json = Set::extract('/User/.', $json);
 
@@ -40,6 +54,8 @@ class UsersController extends AppController {
 
 	public function login() {
 
+		$this->set('pageTitle', 'Login');
+
 		if ($this->request->is('post')) {
 
 			if ($this->Auth->login()) {
@@ -54,6 +70,8 @@ class UsersController extends AppController {
 	}
 
 	public function logout() {
+
+		$this->set('pageTitle', 'Logout');
 		//$this->Cookie->delete('rememberMeSpright');
 		return $this->redirect($this->Auth->logout());
 	}
@@ -64,6 +82,9 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index() {
+
+		$this->set('pageTitle', 'Users');
+
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
@@ -76,6 +97,8 @@ class UsersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+
+		$this->set('pageTitle', 'User');
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -130,6 +153,7 @@ class UsersController extends AppController {
 	}
 
 	public function add() {
+		$this->set('pageTitle', 'Create User');
 
 		if ($this->request->is('post')) {
 			$this->User->create();
@@ -154,6 +178,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('pageTitle', 'Login');
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));

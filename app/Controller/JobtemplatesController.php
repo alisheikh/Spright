@@ -13,7 +13,7 @@ class JobtemplatesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 /**
  * index method
@@ -23,6 +23,17 @@ class JobtemplatesController extends AppController {
 	public function index() {
 		$this->Jobtemplate->recursive = 0;
 		$this->set('jobtemplates', $this->Paginator->paginate());
+	}
+
+	public function getJobTemplates() {
+		$this->paginate = array(
+			'fields' => array('DT_RowId', 'code', 'description', 'created'),
+			'conditions' => array('deleted' => 0));
+
+		$this->DataTable->mDataProp = true;
+		$this->set('response', $this->DataTable->getResponse());
+		$this->set('_serialize', 'response');
+
 	}
 
 /**
@@ -56,14 +67,14 @@ class JobtemplatesController extends AppController {
 			}
 		}
 	}
- 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
+	/**
+	 * edit method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
 	public function edit($id = null) {
 		if (!$this->Jobtemplate->exists($id)) {
 			throw new NotFoundException(__('Invalid jobtemplate'));
@@ -78,16 +89,12 @@ class JobtemplatesController extends AppController {
 		} else {
 
 			$options = array('conditions' => array('Jobtemplate.' . $this->Jobtemplate->primaryKey => $id));
-			$options2 = array('conditions' => array('id' => $id),array('contain'=>array('Skill')));
+			$options2 = array('conditions' => array('id' => $id), array('contain' => array('Skill')));
 			//$this->set('tasks', $this->Paginator->paginate());
 
-
-			
-			
 			$this->request->data = $this->Jobtemplate->find('first', $options);
 
-
-			$this->set('tasks',  $this->Jobtemplate->find('all',$options2));
+			$this->set('tasks', $this->Jobtemplate->find('all', $options2));
 		}
 	}
 

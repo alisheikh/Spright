@@ -8,7 +8,7 @@ App::uses('AppModel', 'Model');
  */
 class Statustype extends AppModel {
 
-	 public $displayField = 'code';
+	public $displayField = 'code';
 
 /**
  * Validation rules
@@ -47,7 +47,7 @@ class Statustype extends AppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'counterQuery' => '',
 		),
 		'Task' => array(
 			'className' => 'Task',
@@ -60,7 +60,17 @@ class Statustype extends AppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'counterQuery' => '',
+		),
+	);
+
+		public $belongsTo = array(
+		'Task' => array(
+			'className' => 'Task',
+			'foreignKey' => 'statustype_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
 		)
 	);
 

@@ -47,25 +47,25 @@ class TasksController extends AppController {
 					'Site' => array(
 						'fields' => array(
 							'Site.code',
-						)
+						),
 					),
 					'Building' => array(
 						'fields' => array(
 							'Building.code',
-						)
+						),
 					),
 					'Floor' => array(
 						'fields' => array(
 							'Floor.code',
-						)
+						),
 					),
 					'Room' => array(
 						'fields' => array(
 							'Room.code',
-						)
-					)
-				)
-			)
+						),
+					),
+				),
+			),
 
 		);
 
@@ -91,16 +91,16 @@ class TasksController extends AppController {
 				echo json_encode($error);
 			} else {
 				Configure::write('debug', 1);
-				throw new InternalErrorException('An internal error occured, the job was not scheduled');// 500 error
+				throw new InternalErrorException('An internal error occured, the job was not scheduled'); // 500 error
 			}
 
 		}
 	}
 
 	public function workplanner() {
-		$this->Task->recursive = 2;
 
-		//$this->Job>contain('Task');
+		$this->set('pageTitle', 'Work Planner');
+		$this->Task->recursive = 2;
 
 		$jobs = $this->Task->find('all', array('order' => array('Job.id DESC')));
 
@@ -108,7 +108,7 @@ class TasksController extends AppController {
 		$this->loadModel('User');
 
 		$this->User->contain('Task');
-		$users = $this->User->find('all', array('conditions' => array('active' => 1)
+		$users = $this->User->find('all', array('conditions' => array('active' => 1),
 		));
 
 		$this->set('tasks', $jobs);

@@ -138,18 +138,29 @@
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
+
+            
                         <li>
             <a href="/room-booking"><i class="fa fa-calendar"></i> Scheduled Work<span class="fa arrow"></span></a>
                          <ul class="nav nav-second-level">
-                    <li>
-                        <a href="/schedules/create">Create Schedule</a>
+                 <li>
+                        <a href="/schedules/">Schedules</a>
                     </li>
                     <li>
-                        <a href="/schedules">Schedules</a>
+                        <a href="/schedules/add">Create Schedule</a>
+                    </li>
+                    </li>
+                    <li>
+                        <a href="/schedules/assign">Assign Schedules</a>
+                    </li>
+
+                      <li>
+                        <a href="/schedules/forecast">Forecast</a>
                     </li>
                 </ul>
-            </li>
+            </li> 
             <li>
+            <!-- Room Booking Coming Soon 
             <li>
             <a href="/room-booking"><i class="fa fa-book fa-fw"></i> Room Booking<span class="fa arrow"></span></a>
                          <ul class="nav nav-second-level">
@@ -161,14 +172,14 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li> -->
                 <a href="#"><i class="fa fa-sitemap fa-fw"></i> Location Management<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#">Buildings</a>
+                        <a href="/codes">Locations (Tree)</a>
                     </li>
                     <li>
-                        <a href="#">Skills</a>
+                        <a href="#">Locations (List)</a>
                     </li>
                 </ul>
                 <!-- /.nav-second-level -->
@@ -194,6 +205,9 @@
                     
                     <li>
                         <a href="/questions">Decision Tree</a>
+                    </li>
+                                        <li>
+                        <a href="/faulttypes">Fault Types</a>
                     </li>
 
                     <li>
