@@ -14,7 +14,7 @@
  
     var jobsTable = $('#jobs-table').DataTable({
         stateSave: true,
-        "bProcessing": true,
+        "bProcessing": false,
         "bServerSide": true,
         "sAjaxSource": "/apis/getjobs.json",
         "columnDefs": [{
@@ -110,7 +110,7 @@
    var tasksTable = $('#tasks-table').dataTable({
         // "scrollX": true,
 
-        "bProcessing": true,
+        "bProcessing": false,
         "bServerSide": true,
         "sAjaxSource": "/jobviews/gettasks.json",
         "columns": [{
@@ -451,6 +451,228 @@ setTimeout(function(){
 });
 
 
+/**
+*
+* Your Tasks
+*
+**/
+
+
+
+
+yourtasksTable = $('#yourTasks-table').DataTable({
+    "sDom": '<"top"ilp><"bottom"ti><"clear">r',
+        "columnDefs": [{
+            "targets": -1,
+            "data": null,
+            "defaultContent": "<button id=\"view\" class=\"btn btn-default btn-xs\" type=\"button\"><i class=\"fa fa-list-alt\"></i></button>"
+        }],
+
+        "bProcessing": false,
+        "bServerSide": true,
+        "sAjaxSource": "/apis/getyourtasks.json",
+        "columns": [
+          
+            {
+                data: "JobID"
+            }, {
+                data: "fullname"
+            },
+            { data: "description" },
+            { data: "Status" },
+             {
+                data: "SiteCode"
+            }, {
+                data: "BuildingCode"
+            }, {
+                data: "FloorCode"
+            }, {
+                data: "RoomCode"
+            }, {
+                data: "qs1"
+            }, {
+                data: "qs2"
+            }, {
+                data: "qs3"
+            }, {
+                data: "qs4"
+            }, {
+                data: "qs5"
+            },
+              {
+                data: null
+            }
+
+        ],
+    });
+
+//Refresh to get new jobs tasks.
+    setInterval(function() {
+        yourtasksTable.ajax.reload(function ( json ) {
+} );
+
+    }, 10000);
+
+
+
+
+   $('#yourTasks-table tbody').on( 'click', '#view', function () {
+
+    var data = yourtasksTable.row( $(this).parents('tr') ).data();
+    var taskID = data.DT_RowId;
+    var status = data.Status;
+
+    switch(status) {
+    case 'Scheduled':
+       html = "<div class=\"text-center\"><button id=\""+taskID+"\" value = \"6\" class=\"btn btn-success btn-lg rejaccTask\">ACCEPT</button> <button id=\""+taskID+"\" class=\"btn btn-danger btn-lg rejaccTask\" value = \"7\">REJECT</button></div>";
+       bootbox.dialog({message: html});
+        break;
+    case 'Accepted':
+
+        jQuery.ajax({
+        type: 'GET',
+        url: '/tasks/completetask/'+taskID,
+        success: function(data) {
+
+        bootbox.dialog({message: data});
+
+        $("#TaskCompletetaskForm").validate({
+              debug:false,
+               ignore: [],
+              rules: {
+            'data[Task][completiondate]' : "required",
+             'data[Task][faulttype_id]': "required",
+            'data[Task][completioncomments]': "required"
+  }    
+  
+});
+        
+
+        }
+    });
+        
+        break;
+}     
+
+    } );
+
+
+
+    /* complete a Task */
+
+   $('body').on( 'click', '.completedTask', function () {
+
+    taskID = this.id;
+    console.log('validate time')
+               
+        if($("#TaskCompletetaskForm").valid()) {
+            console.log('valid or fucking is it.')
+        
+            $(this).html('<i class="fa fa-spinner fa-spin"></i>');
+    $(this).prop('disabled',true);
+
+
+    jQuery.ajax({ 
+        type: 'POST',
+        data: $('#TaskCompletetaskForm').serialize(),
+        url: '/tasks/save/'+taskID,
+        success: function(data) {
+
+         tasksTable.api().ajax.reload(); //Reload yourtasks datatable
+         bootbox.hideAll(); //Close modal
+
+        $.growl("Task Completed", {
+                type: "success",
+
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                }
+        });
+        
+
+    }
+
+    });
+        }else{
+            console.log('NOT VALID')
+        }
+    } );
+
+       /* reject or accept a Task */
+
+   $('body').on( 'click', '.rejaccTask', function () {
+
+    task_id = this.id;
+    statustype_id = this.value;
+
+    $(this).html('<i class="fa fa-spinner fa-spin"></i>');
+    $(this).prop('disabled',true);
+
+     
+    
+
+    jQuery.ajax({ 
+        type: 'POST',
+        data: {"data[Task][statustype_id]": statustype_id, "data[Task][id]": task_id},
+        url: '/tasks/save/'+task_id,
+        success: function(data) {
+
+        yourTasksTable.api().ajax.reload(); //Reload yourtasks datatable
+        bootbox.hideAll(); //Close modal
+
+        $.growl("Task Updated", {
+                type: "success",
+
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                }
+        });
+        
+
+    }
+
+    });
+
+    } );
+
+   /**
+   *
+   * View Job
+   *
+   **/
+   
+   function formatJobView ( completioncomments, completiondate ) {
+    return '<div><strong>Completion Date/Time:</strong> ' + completiondate + '<br /><strong>Completion Comments:</strong> ' + completioncomments + '</div>';
+}
+ $(document).ready(function() {
+   table = $('.jobTasks').DataTable( {} );
+} );
+
+
+// Add event listener for opening and closing details
+$('.jobTasks tbody').on('click', 'td.details-control', function () {
+    var tr = $(this).closest('tr');
+    var row = table.row( tr );
+ 
+    if ( row.child.isShown() ) {
+        // This row is already open - close it
+        row.child.hide();
+        tr.removeClass('shown');
+    }
+    else {
+        // Open this row
+        row.child( formatJobView( tr.data('child-completioncomments'), tr.data('child-completiondate') )).show();
+        tr.addClass('shown');
+    }
+} );
+
+
+   
+
+
+      
 
 
 

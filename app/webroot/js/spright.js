@@ -1152,6 +1152,15 @@ setTimeout(function(){
         location.reload(true); //true force page to reload and not use cache
     });
 
+
+
+
+/**
+*
+* Upoad Component
+*
+**/
+
     //Delete Attachment Confirmation
     $(".btnDelAttach").click(function() {
 
@@ -1171,15 +1180,6 @@ setTimeout(function(){
 
 
     });
-
-
-/**
-*
-* Upoad Component
-*
-**/
-
-
     $(function() {
 
         var ul = $('#upload ul');
@@ -1248,17 +1248,31 @@ setTimeout(function(){
                 data.context.find('input').val(progress).change();
 
                 if (progress == 100) {
-                    data.context.removeClass('working');
+                  location.reload();
+
                 }
             },
 
             fail: function(e, data) {
                 // Something has gone wrong!
-                data.context.addClass('error');
+            //    data.context.addClass('error');
             }
 
         });
 
+$(document).ready(function() {
+    // show active tab on reload
+    if (location.hash !== '') $('a[href="' + location.hash + '"]').tab('show');
+
+    // remember the hash in the URL without jumping
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+       if(history.pushState) {
+            history.pushState(null, null, '#'+$(e.target).attr('href').substr(1));
+       } else {
+            location.hash = '#'+$(e.target).attr('href').substr(1);
+       }
+    });
+});
 
         // Prevent the default action when a file is dropped on the window
         $(document).on('drop dragover', function(e) {

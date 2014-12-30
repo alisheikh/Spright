@@ -193,7 +193,7 @@ class JobsController extends AppController {
 
 		if ($this->request->is(array('post', 'put'))) {
 
-			if ($this->request->data['Job']['completiomcomments']):
+			if ($this->request->data['Job']['completioncomments']):
 				$this->request->data['Job']['statustype_id'] = 3;
 			endif;
 

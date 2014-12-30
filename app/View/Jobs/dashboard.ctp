@@ -14,7 +14,7 @@
 
             <div class="row">
 
-<div class="col-md-6">
+<div class="col-md-4">
  
 <div class="small-box bg-aqua">
 <div class="inner">
@@ -33,8 +33,28 @@ Work Order List <i class="fa fa-arrow-circle-right"></i>
 </a>
 </div>
 </div>
+<div class="col-md-4">
+ 
+ 
+<div class="small-box bg-yellow">
+<div class="inner">
+<h3>
+06
+</h3>
+<p>
+Your Tasks
+</p>
+</div>
+<div class="icon">
+<i class="ion ion-person-add"></i>
+</div>
+<a class="small-box-footer" href="/tasks/yourtasks">
+Your Tasks <i class="fa fa-arrow-circle-right"></i>
+</a>
+</div>
+</div>
 
-<div class="col-md-6">
+<div class="col-md-4">
  
 <div class="small-box bg-green">
 <div class="inner">

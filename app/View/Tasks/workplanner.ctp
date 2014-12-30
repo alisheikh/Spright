@@ -80,7 +80,7 @@ overflow-x: scroll;
 <h3 class="box-title">Resources</h3>
 </div>
 <table class="table table-bordered" id="resources">
-    <thead >
+    <thead class="resourcesHeader">
         <tr>
 
         <?php //debug($users); 
@@ -154,7 +154,7 @@ overflow-x: scroll;
       <div id="unscheduled" class="col-xs-12">
                                   <div class="box">
                                   <div class="box-header">
-                                  <i class="fa fa-tasks"></i>
+                                  <i class="fa fa-tasks ajaxLoader"></i>
 <h3 class="box-title">Unscheduled Tasks</h3>
 </div>
                             

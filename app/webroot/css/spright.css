@@ -22,6 +22,21 @@ justify-content:  space-between}
 *
 **/
 
+table#resources{ 
+    width: 100%; 
+    height: 400px;
+    display: block;
+    overflow-x: auto;
+    overflow-y: auto;  
+}
+
+#resourcesContainer{
+    
+   margin-bottom: 30px;
+    max-height:300px;
+    overflow-y: scroll;
+    
+}
 
 
 /* ICONS */

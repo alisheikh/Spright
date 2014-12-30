@@ -107,6 +107,9 @@ class QuestionsController extends AppController {
  * @return void
  */
 	function index() {
+
+$this->set('pageTitle', 'Decision Tree');
+
 		$jobTemplates = $this->Question->Jobtemplate->find('list');
 
 		$this->set(compact('jobTemplates'));

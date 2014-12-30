@@ -34,7 +34,7 @@ App::uses('Controller', 'Controller');
 //'DebugKit.Toolbar,'
 class AppController extends Controller {
 
-	public $components = array('DataTable','DebugKit.Toolbar',
+	public $components = array('DataTable', 
 		'Acl',
 		'Auth' => array(
 			'authorize' => array(

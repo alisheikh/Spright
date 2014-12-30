@@ -9,9 +9,7 @@
        //  'editBtnTarget'=> '/job/edit/' . $this->data['Job']['id'], //Provice reletive URL
          'sticky'=> true,
          
-     )); 
-
-     debug($this->data);    
+     ));  
      ?>
 
 
@@ -111,11 +109,13 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table table-striped jobTasks" >
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>#</th>
                                             <th>Task</th>
+                                            <th>Status</th>
                                             <th>Scheduled</th>
                                             <th>Resource</th>
                                             <th>Created</th>
@@ -123,12 +123,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                <?php debug($this->data['Task']); ?>
                                 <?php foreach ($this->data['Task'] as $task): ?>    
                                     
-                                        <tr>
+                                        <tr data-child-completioncomments="<?php echo $task['completioncomments']; ?>" data-child-completiondate="<?php echo $task['completiondate']; ?>">
+                                        <td class="details-control"><i class="fa fa-plus"></i></td>
                                              <td><?php echo $task['id']; ?></td>
                                             <td><?php echo $task['code']; ?></td>
+                                            <td><?php echo $task['statustype_id']; ?></td>
                                             <td> 
                                             <?php if ($task['scheduled']): ?>
                                              <i class="fa fa-check" style="color:green"></i>
@@ -137,7 +138,8 @@
                                             <?php endif; ?>
                                             
                                             </td>
-                                             <td><?php if (!$task['scheduled']): echo "-"; else: echo "TO DO"; endif; ?></td>
+                                             <td><?php if (!$task['user_id']): echo "-"; else: echo $task['user_id']; endif; ?></td>
+                                             
                                             <td><?php echo $task['created']; ?></td>
                                             
     

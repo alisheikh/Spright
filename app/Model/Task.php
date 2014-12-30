@@ -71,6 +71,13 @@ class Task extends AppModel {
 			'fields' => '',
 			'order' => '',
 		),
+		'Faulttype' => array(
+			'className' => 'Faulttype',
+			'foreignKey' => 'faulttype_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+		),
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',

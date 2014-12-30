@@ -4,10 +4,10 @@
      
      <?php echo $this->element('contentHeader', array(
          'title'=> $pageTitle,
-         'saveBtn'=> true,
+         'saveBtn'=> false,
      //    'editBtn'=> true,
        //  'editBtnTarget'=> '/job/edit/' . $this->data['Job']['id'], //Provice reletive URL
-         'sticky'=> true,
+         'sticky'=> false,
          
      )); 
  

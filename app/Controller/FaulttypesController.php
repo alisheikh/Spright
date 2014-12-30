@@ -21,6 +21,7 @@ class FaulttypesController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('pageTitle', 'Fault Types');
 		$this->Faulttype->recursive = 0;
 		$this->set('faulttypes', $this->Paginator->paginate());
 	}
@@ -56,6 +57,8 @@ class FaulttypesController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('pageTitle', 'Add Fault Types');
+
 		if ($this->request->is('post')) {
 			$this->Faulttype->create();
 			if ($this->Faulttype->save($this->request->data)) {
@@ -75,6 +78,7 @@ class FaulttypesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('pageTitle', 'Edit Fault Type');
 		if (!$this->Faulttype->exists($id)) {
 			throw new NotFoundException(__('Invalid faulttype'));
 		}
@@ -100,7 +104,7 @@ class FaulttypesController extends AppController {
  */
 	public function delete($id = null) {
 		$this->request->data['faulttype_id'] = $id;
-		
+
 		if (!$this->Faulttype->exists()) {
 			throw new NotFoundException(__('Invalid faulttype'));
 		}

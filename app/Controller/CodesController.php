@@ -390,6 +390,8 @@ class CodesController extends AppController {
 
 	public function assetview($id = null) {
 
+		$this->set('pageTitle', 'View Asset');
+
 		if ($id != null):
 			if (!$this->Code->exists($id)) {
 				throw new NotFoundException(__('Invalid code'));
@@ -400,7 +402,7 @@ class CodesController extends AppController {
 
 			if ($this->Code->save($this->request->data)) {
 				$this->Session->setFlash(__('The code has been saved.'), 'default', array('class' => 'alert alert-success'));
-				//return $this->redirect(array('action' => 'assetview/' . $id));
+				return $this->redirect(array('action' => 'assetview/' . $id));
 			} else {
 				$this->Session->setFlash(__('The code could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
@@ -481,7 +483,7 @@ class CodesController extends AppController {
 		$this->autoRender = false;
 		// A list of permitted file extensions
 		$allowed = array('png', 'jpg', 'gif', 'pdf', 'jpeg');
-		$temp = explode(".", $_FILES["file"]["name"]);
+		//$temp = explode(".", $_FILES["file"]["name"]);
 
 		if (isset($_FILES['upl']) && $_FILES['upl']['error'] == 0) {
 

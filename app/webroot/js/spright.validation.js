@@ -1,10 +1,12 @@
 /*
 * Raise a job
 */
+
+
   	
  // override jquery validate plugin defaults
 $.validator.setDefaults({
-	 
+	 ignore: [],
     highlight: function(element) {
         $(element).closest('.form-group').addClass('has-error');
     },
@@ -114,5 +116,7 @@ var $CreateJobFormValidator = $("#JobAddForm").validate({
   }    
   
 });
+
+
 
 

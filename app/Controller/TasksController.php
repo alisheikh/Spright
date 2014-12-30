@@ -27,51 +27,56 @@ class TasksController extends AppController {
 		$this->set('tasks', $this->Paginator->paginate());
 	}
 
-	function getTasks() {
-		$this->Task->recursive = 2;
+	function yourTasks() {
 
-		$this->Task->Behaviors->load('Containable');
+		$this->set('pageTitle', 'Your Tasks');
 
-		// $this->paginate = array('link' => array('Job'));
+	}
 
-		$this->paginate = array(
-			'fields' => array('Task.id', 'Task.code', 'Task.job_id'),
-			'conditions' => array(
-				'Task.scheduled' => 1,
-			),
-			'contain' => array(
-				'Job' => array(
-					'fields' => array(
-						'Job.id', 'Job.description',
-					),
-					'Site' => array(
-						'fields' => array(
-							'Site.code',
-						),
-					),
-					'Building' => array(
-						'fields' => array(
-							'Building.code',
-						),
-					),
-					'Floor' => array(
-						'fields' => array(
-							'Floor.code',
-						),
-					),
-					'Room' => array(
-						'fields' => array(
-							'Room.code',
-						),
-					),
-				),
-			),
+	function completetask($id = null) {
 
-		);
+		$this->request->data['Task']['id'] = $id;
+		$this->layout = 'ajax';
+		$faulttypes = $this->Task->Faulttype->find('list');
+		$this->set(compact('faulttypes'));
 
-		$this->DataTable->mDataProp = true;
-		$this->set('response', $this->DataTable->getResponse());
-		$this->set('_serialize', 'response');
+	}
+
+	public function save($id = null) {
+
+		$this->autoRender = false;
+
+		if (!$this->Task->exists($id)) {
+			throw new NotFoundException(__('Save Failed Invalid Task'));
+		}
+
+		if ($this->request->is(array('post', 'put'))) {
+
+			//If the task is rejected, then unschedule the task.
+			if ($this->request->data['Task']['statustype_id'] == 7):
+				$this->request->data['Task']['user_id'] = 0;
+				$this->request->data['Task']['scheduled'] = 0;
+			endif;
+
+			//If the task is rejected, then unschedule the task.
+			if ($this->request->data['Task']['statustype_id'] == 3):
+				
+			//Check if this is the last task to be completed.
+			$notCompletedJobs = $this->Task->find('count',array('conditions'=>array('Task.id'=>$id,'statustype_id NOT'=> 3)));
+
+				if($notCompletedJobs<=0):
+					$this->loadModel('Job');
+				endif;
+
+			endif;
+
+			if ($this->Task->save($this->request->data)) {
+
+			} else {
+				throw new NotFoundException(__('Save Failed'));
+			}
+
+		}
 	}
 
 	public function schedule() {
@@ -150,51 +155,4 @@ class TasksController extends AppController {
 		$this->set(compact('jobs', 'statustypes'));
 	}
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function edit($id = null) {
-		if (!$this->Task->exists($id)) {
-			throw new NotFoundException(__('Invalid task'));
-		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Task->save($this->request->data)) {
-				$this->Session->setFlash(__('The task has been saved.'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The task could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
-			}
-		} else {
-			$options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
-			$this->request->data = $this->Task->find('first', $options);
-		}
-		$jobs = $this->Task->Job->find('list');
-		$statustypes = $this->Task->Statustype->find('list');
-		$this->set(compact('jobs', 'statustypes'));
-	}
-
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
-		$this->Task->id = $id;
-		if (!$this->Task->exists()) {
-			throw new NotFoundException(__('Invalid task'));
-		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Task->delete()) {
-			$this->Session->setFlash(__('The task has been deleted.'), 'default', array('class' => 'alert alert-success'));
-		} else {
-			$this->Session->setFlash(__('The task could not be deleted. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
-		}
-		return $this->redirect(array('action' => 'index'));
-	}
 }

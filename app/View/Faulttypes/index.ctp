@@ -1,16 +1,32 @@
- <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-cog"></i> Fault Types
-<a href="/faulttypes/add/" class="btn btn-danger pull-right" id="addButton"><i class="fa fa-plus"></i></a>
-                    </h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
+
+
+
+
+                      <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+     
+     <?php echo $this->element('contentHeader', array(
+         'title'=> $pageTitle,
+        'saveBtn'=> false,
+        'addBtn'=> true,
+          'addBtnTarget'=> '/faulttypes/add/', //Provice reletive URL
+         'sticky'=> true,
+         
+     )); 
+
+     ?>
+
+
+                <!-- Main content -->
+                <section class="content">
+
             <div class="row">
 
-            <table id="fault-codes" class="table table-striped table-bordered">
+            <div class="col-xs-12">
+                            <div class="box">
+                            
+<div class="box-body table-responsive">
+                        <table id="fault-codes" class="table table-striped table-bordered">
                 <thead>
                     <th>Name</th>
                     <th>Created</th>
@@ -20,11 +36,23 @@
                 <tbody>
                 </tbody>
             </table>
-
-   
+</div>
+</div>
+                           
             </div>
             <!-- /.row -->
         </div>
-        <!-- /#page-wrapper -->
-        
-        <!-- Modal -->
+
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+
+
+
+
+
+
+
+
+
+
+

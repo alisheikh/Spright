@@ -16,6 +16,7 @@
         <link href="/css/select2.css" rel="stylesheet"/>
         <link href="/css/select2-bootstrap.css" rel="stylesheet"/>
         <link href="/css/ui.fancytree.min.css" rel="stylesheet" type="text/css"> 
+        <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
         <link href="/css/spright.css" rel="stylesheet"/>
 
 
@@ -119,10 +120,10 @@
                             </a>
                         </li>
                <li class="treeview">
-                <a href="#"><i class="fa fa-tasks"></i> <span>Asset Module</span><i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-cubes"></i> <span>Asset Module</span><i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="/assets/"><i class="fa fa-angle-double-right"></i> View Assets</a>
+                        <a href="/assets/"><i class="fa fa-angle-double-right"></i> Asset List</a>
                     </li>
                     <li>
                         <a href="/assets/create/"><i class="fa fa-angle-double-right"></i> Create Asset</a>
@@ -140,6 +141,9 @@
                         <a href="/jobs/"><i class="fa fa-angle-double-right"></i> Work Order List</a>
                     </li>
                     <li>
+                        <a href="/tasks/yourtasks"><i class="fa fa-angle-double-right"></i> Your Tasks</a>
+                    </li>
+                    <li>
                         <a href="/tasks/workplanner"><i class="fa fa-angle-double-right"></i> Work Planner</a>
                     </li>
 
@@ -148,7 +152,7 @@
                 <!-- /.nav-second-level -->
             </li> 
                            <li class="treeview">
-                <a href="#"><i class="fa fa-tasks"></i> <span>Configuration</span><i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-cogs"></i> <span>Configuration</span><i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li>
                         <a href="/users"><i class="fa fa-angle-double-right"></i> User Management</a>
@@ -236,7 +240,10 @@ $('.sticky').affix({
         top: $('header').height()
       }
 }); 
+
+
 </script>
+
 
     </body>
 </html>

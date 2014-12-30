@@ -1,37 +1,30 @@
 
+                      <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+     
+     <?php echo $this->element('contentHeader', array(
+         'title'=> $pageTitle,
+        'saveBtn'=> true,
+      //  'addBtn'=> true,
+         // 'addBtnTarget'=> '/faulttypes/add/', //Provice reletive URL
+         'sticky'=> true,
+         
+     )); 
+
+     ?>
 
 
+                <!-- Main content -->
+                <section class="content">
 
-<style>
-.btn-group{
-      bottom: 15px;
-    position: relative;
-    top: 15px;
+            <div class="row">
 
-}
-</style>
+            <div class="col-xs-12">
+<div class="nav-tabs-custom">
 
-<div id="page-wrapper" class="assetCreate">
 
-            <div class="panel-body">
-
-                <div class="row">
-<div class="page-header col-md-6">
-      <h3 class="pull-left">
-        View Asset
-      </h3>
-      <div class="pull-right">
-        <div class="btn-group">
-          <button class="btn btn-success" id="saveAsset" style="width:60px">
-            Save
-          </button>
-        </div>
-      </div>
-      <div class="clearfix"></div>
-    </div>
-         <div class="clearfix"></div>              
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs">
+ <!-- Nav tabs -->
+                     <ul id="tabs" class="nav nav-tabs">
 
                         <li class="active"><a href="#general" data-toggle="tab">General <i class="fa"></i></a></li>
                         <li><a href="#attachments" data-toggle="tab">Attachments</a></li>
@@ -138,7 +131,7 @@ echo $this->Form->input('Room.code', array('type' => 'select','label' => 'Room',
                                             <td> <a href=/files/<?php echo $attachment['attachment']; ?> title="download"><?php echo $attachment['name']; ?></a></td>
                                             <td><?php echo $attachment['type']; ?></td>
                                             <td><?php echo $attachment['size']; ?></td>
-                                            <td><?php echo $attachment['createdate']; ?></td>
+                                            <td><?php echo $attachment['created']; ?></td>
                                             <td>
 
 
@@ -173,7 +166,30 @@ echo $this->Form->input('Room.code', array('type' => 'select','label' => 'Room',
                    </div>
 
 <?php echo $this->Form->end() ?>
-      
+</div>
+</div>
+                           
+            </div>
+            <!-- /.row -->
+        </div>
+
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
